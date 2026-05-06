@@ -318,6 +318,23 @@
       z-index: 0;
     }
 
+    .tools-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .loot-btn {
+      border-color: rgba(139, 26, 26, 0.35);
+    }
+
+    .loot-btn:hover {
+      color: #e8a080;
+      border-color: rgba(192, 57, 43, 0.6);
+      box-shadow: 0 0 16px rgba(192,57,43,0.12);
+    }
+
     /* Translator button */
     .tools-section {
       margin-top: 40px;
@@ -501,11 +518,17 @@
     </div>
 
     <div class="tools-section">
-      <span class="tools-label">Strumenti</span>
-      <a class="tool-btn" href="https://traduttorednd.netlify.app/" target="_blank">
-        <span class="tool-btn-icon">📖</span>
-        Traduttore D&amp;D
-      </a>
+      <span class="tools-label">Strumenti &amp; Loot</span>
+      <div class="tools-row">
+        <a class="tool-btn" href="https://traduttorednd.netlify.app/" target="_blank">
+          <span class="tool-btn-icon">📖</span>
+          Traduttore D&amp;D
+        </a>
+        <a class="tool-btn loot-btn" href="dagger_luce.html" target="_blank">
+          <span class="tool-btn-icon">🗡️</span>
+          Scheggia dell'Alba
+        </a>
+      </div>
     </div>
 
     <footer class="footer">
