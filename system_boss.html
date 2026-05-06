@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYSTEM — Boss Sheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;700&display=swap');
+
+  :root {
+    --cyan: #00f5ff;
+    --magenta: #ff00aa;
+    --white: #e8f4ff;
+    --dark: #040810;
+    --mid: #0a1628;
+    --panel: #060f1e;
+    --gold: #ffd700;
+    --red: #ff2244;
+    --green: #00ff88;
+    --orange: #ff8800;
+    --glow-c: 0 0 8px #00f5ff, 0 0 20px #00f5ffaa;
+    --glow-m: 0 0 8px #ff00aa, 0 0 20px #ff00aaaa;
+    --glow-g: 0 0 8px #ffd700, 0 0 20px #ffd700aa;
+    --glow-r: 0 0 8px #ff2244, 0 0 20px #ff2244aa;
+    --glow-green: 0 0 8px #00ff88, 0 0 20px #00ff88aa;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    min-height: 100%;
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 64px;
+    position: relative;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridScroll 24s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes gridScroll { from{background-position:0 0} to{background-position:40px 40px} }
+
+  /* SCANLINES */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .page-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ===================== HERO HEADER ===================== */
+  .hero {
+    background: var(--panel);
+    border: 1px solid rgba(0,245,255,0.2);
+    border-bottom: none;
+    padding: 32px 36px 28px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(0,245,255,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(255,0,170,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .corner { position: absolute; width: 16px; height: 16px; border-color: var(--cyan); border-style: solid; }
+  .corner-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .corner-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+  .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+  .corner-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .hero-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px; font-weight: 700; letter-spacing: 4px;
+    color: var(--red); text-shadow: var(--glow-r);
+    border: 1px solid rgba(255,34,68,0.4);
+    display: inline-block;
+    padding: 3px 12px; margin-bottom: 10px;
+    background: rgba(255,34,68,0.05);
+    animation: blink 2.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(36px, 8vw, 64px);
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: var(--glow-c);
+    letter-spacing: 8px;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+  }
+  .hero-title::after {
+    content: 'SYSTEM';
+    position: absolute; top: 0; left: 0;
+    color: var(--magenta);
+    opacity: 0;
+    animation: glitch 5s steps(1) infinite;
+  }
+  @keyframes glitch {
+    0%,90%{opacity:0;transform:translate(0)}
+    91%{opacity:0.7;transform:translate(-3px,1px);clip-path:inset(20% 0 70% 0)}
+    92%{opacity:0.7;transform:translate(3px,-2px);clip-path:inset(60% 0 20% 0)}
+    93%{opacity:0.7;transform:translate(-1px,0);clip-path:inset(40% 0 40% 0)}
+    94%{opacity:0}
+  }
+
+  .hero-sub {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 300; letter-spacing: 4px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 6px; text-transform: uppercase;
+  }
+
+  .hero-tags {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .htag {
+    font-size: 9px; letter-spacing: 2px;
+    padding: 4px 12px; border: 1px solid;
+    text-transform: uppercase; font-family: 'Orbitron', sans-serif;
+  }
+  .htag-cr { color: var(--red); border-color: rgba(255,34,68,0.35); background: rgba(255,34,68,0.04); }
+  .htag-sz { color: var(--cyan); border-color: rgba(0,245,255,0.3); background: rgba(0,245,255,0.04); }
+  .htag-al { color: var(--gold); border-color: rgba(255,215,0,0.3); background: rgba(255,215,0,0.04); }
+  .htag-lv { color: var(--green); border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.04); }
+
+  /* ===================== TRACKER BAR ===================== */
+  .tracker-bar {
+    background: var(--panel);
+    border: 1px solid rgba(0,245,255,0.15);
+    border-top: 1px solid rgba(255,34,68,0.2);
+    padding: 20px 36px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .tracker-block { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+  .tracker-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px; letter-spacing: 3px;
+    color: rgba(0,245,255,0.5); text-transform: uppercase;
+  }
+  .tracker-controls {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .tracker-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px; font-weight: 900;
+    min-width: 80px; text-align: center;
+    padding: 4px 8px;
+    border: 1px solid rgba(0,245,255,0.15);
+    background: rgba(0,0,0,0.3);
+  }
+  .tracker-value.hp-val { color: var(--red); text-shadow: var(--glow-r); }
+  .tracker-value.fw-val { color: var(--cyan); text-shadow: var(--glow-c); }
+
+  .tracker-btn {
+    background: none;
+    border: 1px solid rgba(0,245,255,0.25);
+    color: var(--cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tracker-btn:hover { background: rgba(0,245,255,0.1); border-color: var(--cyan); box-shadow: var(--glow-c); }
+  .tracker-btn.minus { border-color: rgba(255,34,68,0.3); color: var(--red); }
+  .tracker-btn.minus:hover { background: rgba(255,34,68,0.1); border-color: var(--red); box-shadow: var(--glow-r); }
+
+  .tracker-input-wrap {
+    display: flex; gap: 6px; align-items: center;
+  }
+  .tracker-quick-input {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(0,245,255,0.15);
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    padding: 4px 8px;
+    width: 70px;
+    text-align: center;
+    outline: none;
+  }
+  .tracker-quick-input:focus { border-color: rgba(0,245,255,0.5); }
+  .tracker-set-btn {
+    background: none;
+    border: 1px solid rgba(0,245,255,0.2);
+    color: rgba(0,245,255,0.6);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 1px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tracker-set-btn:hover { background: rgba(0,245,255,0.08); color: var(--cyan); }
+
+  .tracker-sub {
+    font-size: 10px; color: rgba(255,255,255,0.3);
+    margin-top: 2px;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  /* HP bar visual */
+  .hp-bar-wrap { margin-top: 4px; }
+  .hp-bar-bg { background: rgba(255,255,255,0.06); height: 4px; width: 100%; position: relative; }
+  .hp-bar-fill {
+    height: 100%; background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    transition: width 0.3s ease;
+  }
+  .fw-bar-fill {
+    height: 100%; background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+    transition: width 0.3s ease;
+  }
+
+  /* ===================== CONTENT GRID ===================== */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid rgba(0,245,255,0.12);
+    border-top: none;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .section {
+    padding: 24px 28px;
+    border: 1px solid rgba(0,245,255,0.08);
+    border-top: none; border-left: none;
+    position: relative;
+  }
+  .section:nth-child(odd) { border-left: none; }
+  .section:nth-child(even) { border-right: none; }
+  .section.full { grid-column: 1 / -1; border-right: none; }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px; letter-spacing: 4px;
+    color: rgba(0,245,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,245,255,0.07);
+  }
+
+  /* ===================== STATS ===================== */
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 12px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-key { color: rgba(255,255,255,0.45); font-size: 11px; }
+  .stat-val { color: var(--cyan); font-weight: bold; }
+  .stat-val.red { color: var(--red); }
+  .stat-val.gold { color: var(--gold); }
+  .stat-val.green { color: var(--green); }
+
+  /* ABILITY SCORES */
+  .ability-scores {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 6px; margin-top: 4px;
+  }
+  .ab-cell {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,245,255,0.1);
+    padding: 8px 4px;
+    text-align: center;
+  }
+  .ab-name { font-size: 9px; color: rgba(255,255,255,0.35); letter-spacing: 1px; margin-bottom: 3px; }
+  .ab-score { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 700; color: var(--cyan); }
+  .ab-mod { font-size: 10px; color: rgba(0,245,255,0.55); margin-top: 2px; }
+
+  /* SAVES */
+  .saves-row {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;
+  }
+  .save-chip {
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 1px solid rgba(0,245,255,0.2);
+    background: rgba(0,245,255,0.04);
+    color: var(--cyan);
+  }
+
+  /* ===================== IMMUNITIES / RESISTANCES ===================== */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .small-tag {
+    font-size: 9px; letter-spacing: 1px;
+    padding: 3px 8px; border: 1px solid;
+    text-transform: uppercase;
+  }
+  .tag-imm { color: var(--red); border-color: rgba(255,34,68,0.3); background: rgba(255,34,68,0.04); }
+  .tag-res { color: var(--orange); border-color: rgba(255,136,0,0.3); background: rgba(255,136,0,0.04); }
+
+  /* ===================== ABILITIES / ACTIONS ===================== */
+  .ability-card {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border: 1px solid rgba(0,245,255,0.1);
+    background: rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .ability-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .ability-card.magenta::before { background: var(--magenta); box-shadow: 0 0 8px var(--magenta); }
+  .ability-card.gold::before { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+  .ability-card.red::before { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .ability-card.green::before { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .ability-card:last-child { margin-bottom: 0; }
+
+  .ability-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--cyan); margin-bottom: 6px;
+  }
+  .ability-card.magenta .ability-title { color: var(--magenta); }
+  .ability-card.gold .ability-title { color: var(--gold); }
+  .ability-card.red .ability-title { color: var(--red); }
+  .ability-card.green .ability-title { color: var(--green); }
+
+  .ability-badge {
+    display: inline-block;
+    font-size: 8px; letter-spacing: 2px;
+    padding: 2px 7px; margin-bottom: 8px;
+    border: 1px solid rgba(0,245,255,0.25);
+    color: rgba(0,245,255,0.6);
+    text-transform: uppercase;
+  }
+  .ability-card.magenta .ability-badge { border-color: rgba(255,0,170,0.25); color: rgba(255,0,170,0.6); }
+  .ability-card.gold .ability-badge { border-color: rgba(255,215,0,0.25); color: rgba(255,215,0,0.6); }
+  .ability-card.red .ability-badge { border-color: rgba(255,34,68,0.25); color: rgba(255,34,68,0.6); }
+  .ability-card.green .ability-badge { border-color: rgba(0,255,136,0.25); color: rgba(0,255,136,0.6); }
+
+  .ability-desc {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; line-height: 1.55;
+    color: rgba(255,255,255,0.65);
+  }
+  .ability-desc b { color: var(--white); }
+  .ability-desc .val { color: var(--cyan); font-family: 'Share Tech Mono', monospace; }
+  .ability-card.red .ability-desc .val { color: var(--red); }
+  .ability-card.gold .ability-desc .val { color: var(--gold); }
+
+  /* LEGENDARY ACTIONS */
+  .leg-action {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 12px; padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .leg-action:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+  .leg-cost {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; font-weight: 900;
+    min-width: 28px; height: 28px;
+    border: 1px solid rgba(255,215,0,0.4);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: rgba(255,215,0,0.05);
+  }
+  .leg-body {}
+  .leg-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--gold); margin-bottom: 4px;
+  }
+  .leg-desc {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px; line-height: 1.5;
+    color: rgba(255,255,255,0.55);
+  }
+  .leg-desc b { color: var(--white); }
+
+  /* ===================== GLITCH AURA DICE ===================== */
+  .dice-section {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,0,170,0.15);
+    padding: 20px;
+    margin-top: 0;
+    position: relative;
+  }
+  .dice-center { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .dice-display {
+    width: 80px; height: 80px;
+    border: 2px solid rgba(255,0,170,0.4);
+    background: rgba(255,0,170,0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 36px; font-weight: 900;
+    color: var(--magenta); text-shadow: var(--glow-m);
+    position: relative;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .dice-display:hover { border-color: var(--magenta); box-shadow: var(--glow-m); }
+  .dice-display.rolling {
+    animation: diceRoll 0.6s ease;
+  }
+  @keyframes diceRoll {
+    0%{transform:scale(1)} 20%{transform:scale(1.1) rotate(-5deg)} 
+    40%{transform:scale(0.95) rotate(5deg)} 60%{transform:scale(1.05) rotate(-3deg)}
+    80%{transform:scale(0.98) rotate(2deg)} 100%{transform:scale(1) rotate(0)}
+  }
+  .dice-roll-btn {
+    background: rgba(255,0,170,0.08);
+    border: 1px solid rgba(255,0,170,0.35);
+    color: var(--magenta);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 2px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .dice-roll-btn:hover { background: rgba(255,0,170,0.15); box-shadow: var(--glow-m); border-color: var(--magenta); }
+  .dice-result-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    margin-top: 8px;
+  }
+  .dice-result-text .outcome {
+    color: var(--magenta);
+    font-weight: 700;
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+  }
+  .dice-result-text .outcome.active { color: var(--red); text-shadow: var(--glow-r); animation: blink 1s infinite; }
+
+  .glitch-effects {
+    margin-top: 14px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .glitch-effect-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 8px 10px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.2);
+    font-size: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.5);
+    transition: all 0.3s;
+  }
+  .glitch-effect-item.triggered {
+    border-color: rgba(255,0,170,0.4);
+    background: rgba(255,0,170,0.06);
+    color: rgba(255,255,255,0.8);
+    box-shadow: inset 0 0 12px rgba(255,0,170,0.05);
+  }
+  .glitch-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px; font-weight: 700;
+    color: var(--magenta); min-width: 16px;
+    opacity: 0.7;
+  }
+  .glitch-effect-item.triggered .glitch-num { opacity: 1; }
+
+  /* ===================== DIALOGUE ===================== */
+  .dialogue-item {
+    margin-bottom: 14px;
+    padding: 12px 16px;
+    border-left: 2px solid rgba(0,245,255,0.2);
+    background: rgba(0,0,0,0.2);
+    font-family: 'Rajdhani', sans-serif;
+  }
+  .dialogue-trigger {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(0,245,255,0.4); margin-bottom: 6px;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .dialogue-text {
+    font-size: 13px; font-style: italic;
+    color: rgba(255,255,255,0.7); line-height: 1.55;
+  }
+
+  /* ===================== DM NOTES ===================== */
+  .dm-note {
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: rgba(255,215,0,0.03);
+    border: 1px solid rgba(255,215,0,0.1);
+  }
+  .dm-note-icon {
+    font-size: 16px; min-width: 20px;
+    color: var(--gold); text-shadow: var(--glow-g);
+    flex-shrink: 0;
+  }
+  .dm-note-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; line-height: 1.55;
+    color: rgba(255,255,255,0.55);
+  }
+  .dm-note-text b { color: var(--gold); }
+
+  /* ===================== REWARD BUTTON ===================== */
+  .reward-section {
+    padding: 28px 36px;
+    background: var(--panel);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-top: 1px solid rgba(0,245,255,0.1);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+    animation: fadeUp 1s ease both;
+  }
+  .reward-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px; letter-spacing: 4px;
+    color: rgba(255,215,0,0.5); margin-bottom: 6px;
+  }
+  .reward-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px; font-weight: 900;
+    color: var(--gold); text-shadow: var(--glow-g);
+    letter-spacing: 3px;
+  }
+  .reward-desc {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px; color: rgba(255,255,255,0.35);
+    margin-top: 4px; letter-spacing: 2px;
+  }
+  .reward-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,215,0,0.07);
+    border: 1px solid rgba(255,215,0,0.4);
+    color: var(--gold);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px; letter-spacing: 3px;
+    padding: 12px 24px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .reward-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,215,0,0.05);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .reward-btn:hover { border-color: var(--gold); box-shadow: var(--glow-g); }
+  .reward-btn:hover::before { transform: scaleX(1); }
+
+  /* ===================== LORE ===================== */
+  .lore-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; line-height: 1.7;
+    color: rgba(255,255,255,0.5);
+  }
+  .lore-text em { color: rgba(255,255,255,0.7); font-style: normal; }
+  .lore-text .highlight { color: var(--cyan); }
+
+  /* INTELLIGENCE BULLETS */
+  .intel-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    margin-bottom: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; line-height: 1.5;
+    color: rgba(255,255,255,0.55);
+  }
+  .intel-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    margin-top: 5px; flex-shrink: 0;
+  }
+  .intel-item b { color: var(--red); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .content-grid { grid-template-columns: 1fr; }
+    .section.full { grid-column: 1; }
+    .ability-scores { grid-template-columns: repeat(3,1fr); }
+    .hero { padding: 20px 20px 18px; }
+    .tracker-bar { padding: 16px 20px; }
+    .reward-section { padding: 20px; }
+    .section { padding: 18px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- ══════════ HERO ══════════ -->
+  <div class="hero">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="hero-badge">⚠ BOSS SEGRETO — D&amp;D 5e — LIVELLO 6 ⚠</div>
+    <div class="hero-title">SYSTEM</div>
+    <div class="hero-sub">Anomalia di Grande Taglia &nbsp;·&nbsp; Caotico Neutrale &nbsp;·&nbsp; Un Errore con Coscienza</div>
+    <div class="hero-tags">
+      <span class="htag htag-cr">⬡ Anomalia</span>
+      <span class="htag htag-sz">◈ Grande Taglia</span>
+      <span class="htag htag-al">★ Caotico Neutrale</span>
+      <span class="htag htag-lv">∞ LVL 6</span>
+    </div>
+  </div>
+
+  <!-- ══════════ HP + FIREWALL TRACKER ══════════ -->
+  <div class="tracker-bar">
+    <!-- HP -->
+    <div class="tracker-block">
+      <div class="tracker-label">// punti_ferita</div>
+      <div class="tracker-controls">
+        <button class="tracker-btn minus" onclick="changeHP(-1)">−</button>
+        <div class="tracker-value hp-val" id="hpDisplay">180</div>
+        <button class="tracker-btn" onclick="changeHP(+1)">+</button>
+      </div>
+      <div class="tracker-input-wrap">
+        <input class="tracker-quick-input" type="number" id="hpInput" placeholder="Setta HP">
+        <button class="tracker-set-btn" onclick="setHP()">SET</button>
+        <button class="tracker-set-btn" onclick="setHP(180)">RESET</button>
+      </div>
+      <div class="hp-bar-wrap">
+        <div class="hp-bar-bg"><div class="hp-bar-fill" id="hpBar" style="width:100%"></div></div>
+      </div>
+      <div class="tracker-sub" id="hpSub">180 / ∞ — nessun limite massimo</div>
+    </div>
+
+    <!-- FIREWALL -->
+    <div class="tracker-block">
+      <div class="tracker-label">// firewall_layers</div>
+      <div class="tracker-controls">
+        <button class="tracker-btn minus" onclick="changeFW(-1)">−</button>
+        <div class="tracker-value fw-val" id="fwDisplay">25</div>
+        <button class="tracker-btn" onclick="changeFW(+1)">+</button>
+      </div>
+      <div class="tracker-input-wrap">
+        <input class="tracker-quick-input" type="number" id="fwInput" placeholder="Setta FW">
+        <button class="tracker-set-btn" onclick="setFW()">SET</button>
+        <button class="tracker-set-btn" onclick="setFW(25)">RESET</button>
+      </div>
+      <div class="hp-bar-wrap">
+        <div class="hp-bar-bg"><div class="fw-bar-fill" id="fwBar" style="width:100%"></div></div>
+      </div>
+      <div class="tracker-sub" id="fwSub">25 / ∞ — nessun limite massimo</div>
+    </div>
+  </div>
+
+  <!-- ══════════ CONTENT GRID ══════════ -->
+  <div class="content-grid">
+
+    <!-- STAT BASE -->
+    <div class="section">
+      <div class="section-title">// statistiche_base</div>
+      <div class="stat-row"><span class="stat-key">CA</span><span class="stat-val">17 (campo di distorsione)</span></div>
+      <div class="stat-row"><span class="stat-key">Velocità</span><span class="stat-val">0 ft</span></div>
+      <div class="stat-row"><span class="stat-key">Percezione Passiva</span><span class="stat-val">12</span></div>
+      <div class="stat-row"><span class="stat-key">Tiri Salvezza</span><span class="stat-val">INT +10 · SAG +5 · COS +6</span></div>
+      <div class="stat-row"><span class="stat-key">Telepazia</span><span class="stat-val">120 ft</span></div>
+      <div class="stat-row"><span class="stat-key">Linguaggi</span><span class="stat-val">Tutti (assorbiti)</span></div>
+
+      <div style="margin-top:16px;">
+        <div class="section-title" style="margin-bottom:10px;">// caratteristiche</div>
+        <div class="ability-scores">
+          <div class="ab-cell"><div class="ab-name">FOR</div><div class="ab-score">10</div><div class="ab-mod">+0</div></div>
+          <div class="ab-cell"><div class="ab-name">DES</div><div class="ab-score">10</div><div class="ab-mod">+0</div></div>
+          <div class="ab-cell"><div class="ab-name">COS</div><div class="ab-score">16</div><div class="ab-mod">+3</div></div>
+          <div class="ab-cell"><div class="ab-name">INT</div><div class="ab-score" style="color:var(--red)">24</div><div class="ab-mod" style="color:rgba(255,34,68,0.7)">+7</div></div>
+          <div class="ab-cell"><div class="ab-name">SAG</div><div class="ab-score">14</div><div class="ab-mod">+2</div></div>
+          <div class="ab-cell"><div class="ab-name">CAR</div><div class="ab-score">8</div><div class="ab-mod">−1</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div class="section-title" style="margin-bottom:8px;">// immunità & resistenze</div>
+        <div class="tag-list">
+          <span class="small-tag tag-imm">Veleno</span>
+          <span class="small-tag tag-imm">Psichico</span>
+          <span class="small-tag tag-imm">Charmed</span>
+          <span class="small-tag tag-imm">Frightened</span>
+          <span class="small-tag tag-imm">Exhausted</span>
+          <span class="small-tag tag-imm">Paralyzed</span>
+        </div>
+        <div class="tag-list" style="margin-top:6px;">
+          <span class="small-tag tag-res">Tutti i danni non magici</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LORE -->
+    <div class="section">
+      <div class="section-title">// lore</div>
+      <div class="lore-text">
+        SYSTEM non è una creatura, non è un demone, non è un'entità invocata. <em>È un errore.</em> Un glitch nel tessuto stesso della realtà, un punto in cui la magia e la materia si sono accumulate in modo così caotico e innaturale da diventare qualcosa di indefinibile.<br><br>
+        Ciò che lo rende unico e terrificante non è la sua potenza distruttiva in sé, ma il fatto che abbia abbastanza energia e materia condensata da aver <span class="highlight">sviluppato una coscienza</span>. SYSTEM sa di esistere. Sa di essere sbagliato. E non gli importa.<br><br>
+        Quando i personaggi entrano nella cella, SYSTEM <em>non attacca subito</em>. Osserva. Calcola. E poi parla.
+      </div>
+    </div>
+
+    <!-- MECCANICHE SPECIALI -->
+    <div class="section">
+      <div class="section-title">// meccaniche_speciali</div>
+
+      <div class="ability-card">
+        <div class="ability-badge">Passivo</div>
+        <div class="ability-title">FIREWALL</div>
+        <div class="ability-desc">
+          SYSTEM è circondato da <b>25 punti di campo corrosivo stabile</b>. Ogni attacco fisico riduce prima il Firewall. Solo quando il Firewall è a <span class="val">0</span> i danni si applicano agli HP. Il Firewall si ricarica con l'abilità omonima.
+        </div>
+      </div>
+
+      <div class="ability-card magenta">
+        <div class="ability-badge">Passivo</div>
+        <div class="ability-title">CALCOLO DEI FUTURI</div>
+        <div class="ability-desc">
+          SYSTEM non può essere sorpreso. Inoltre, <b>una volta per turno</b>, può annullare il vantaggio di un attacco contro di sé — il glitch semplicemente "rilegge" la sequenza degli eventi e la corregge.
+        </div>
+      </div>
+    </div>
+
+    <!-- AURA GLITCH DICE -->
+    <div class="section">
+      <div class="section-title">// aura_di_glitch — tira 1d6</div>
+      <div class="ability-desc" style="font-family:'Rajdhani',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:12px;">
+        All'inizio di ogni round, tira 1d6 in segreto. Con un <b style="color:var(--magenta)">6</b>, uno degli effetti sotto si verifica.
+      </div>
+      <div class="dice-section">
+        <div class="dice-center">
+          <div class="dice-display" id="diceDisplay" onclick="rollDice()">?</div>
+          <div>
+            <button class="dice-roll-btn" onclick="rollDice()">⚡ Tira 1d6</button>
+            <div class="dice-result-text" id="diceResult">Clicca per tirare il dado</div>
+          </div>
+        </div>
+        <div class="glitch-effects" id="glitchEffects">
+          <div class="glitch-effect-item" id="ge1"><span class="glitch-num">1</span> Le fonti di luce si invertono — zone illuminate diventano buie e viceversa per 1 round.</div>
+          <div class="glitch-effect-item" id="ge2"><span class="glitch-num">2</span> Un oggetto non magico tenuto da un PG cambia forma inutilizzabile per 1 round, poi torna normale.</div>
+          <div class="glitch-effect-item" id="ge3"><span class="glitch-num">3</span> Un PG a caso sente i propri pensieri "in ritardo" — svantaggio alla prossima reazione.</div>
+          <div class="glitch-effect-item" id="ge4"><span class="glitch-num">4</span> Le superfici emettono simboli e numeri senza senso. Nessun effetto meccanico, ma è inquietante.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AZIONI -->
+    <div class="section full">
+      <div class="section-title">// azioni</div>
+
+      <div class="ability-card">
+        <div class="ability-badge">Azione — Attacco Magico</div>
+        <div class="ability-title">CALCOLO QUANTISTICO</div>
+        <div class="ability-desc">
+          SYSTEM analizza ogni possibile variante del futuro immediato e colpisce nel punto esatto di minima resistenza.<br><br>
+          <b>Attacco magico a distanza</b>, gittata <span class="val">60 ft</span>, un bersaglio — Tiro per colpire: <span class="val">+9</span><br>
+          Colpo: <span class="val">3d10 + 7</span> danni da forza<br>
+          Se SYSTEM ha già colpito lo stesso bersaglio nel round precedente, aggiunge <span class="val">+1d6</span> danni extra.
+        </div>
+      </div>
+
+      <div class="ability-card magenta">
+        <div class="ability-badge">Azione — Area</div>
+        <div class="ability-title">DATI CORROTTI</div>
+        <div class="ability-desc">
+          SYSTEM inocula sequenze di errore direttamente nelle menti vicine.<br><br>
+          <b>Tutti i bersagli entro 30 ft</b> — TS su <span class="val">Intelligenza CD 17</span><br>
+          <b>Fallimento:</b> <span class="val">4d8</span> danni psichici + svantaggio ai tiri di attacco per 2 round<br>
+          <b>Successo:</b> metà danni, nessun debuff
+        </div>
+      </div>
+
+      <div class="ability-card red">
+        <div class="ability-badge">Azione — Ricarica 5–6</div>
+        <div class="ability-title">OVERLOAD NEURALE</div>
+        <div class="ability-desc">
+          SYSTEM smette momentaneamente di contenere la propria energia e la scarica in un'unica esplosione caotica.<br><br>
+          <b>Un bersaglio entro 60 ft</b> — TS su <span class="val">Costituzione CD 17</span><br>
+          <b>Fallimento:</b> <span class="val">8d10</span> danni da fulmine<br>
+          <b>Successo:</b> metà danni<br>
+          Dopo l'uso, non disponibile per <span class="val">4 round</span> (ricarica su 5–6)
+        </div>
+      </div>
+
+      <div class="ability-card gold" style="border:1px solid rgba(255,215,0,0.15);">
+        <div class="ability-badge">Azione Bonus — 1× per combat. / Auto &lt;30% HP</div>
+        <div class="ability-title">FIREWALL ASSOLUTO</div>
+        <div class="ability-desc">
+          L'energia corrosiva si comprime e si stabilizza attorno a SYSTEM.<br><br>
+          Ripristina <span class="val">25 punti</span> di Firewall<br>
+          Tutti i bersagli entro <span class="val">30 ft</span>: TS su <span class="val">Forza CD 15</span> o svantaggio agli attacchi per 2 round
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGENDARY ACTIONS -->
+    <div class="section">
+      <div class="section-title">// azioni_leggendarie — 3 per round</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:14px;letter-spacing:1px;">Usabili alla fine del turno di un altro personaggio</div>
+
+      <div class="leg-action">
+        <div class="leg-cost">1</div>
+        <div class="leg-body">
+          <div class="leg-name">SCANSIONE</div>
+          <div class="leg-desc">SYSTEM glitcha la percezione di un PG. Fino alla fine del prossimo turno di SYSTEM, quel PG <b>non può avere vantaggio</b> contro di lui.</div>
+        </div>
+      </div>
+
+      <div class="leg-action">
+        <div class="leg-cost">2</div>
+        <div class="leg-body">
+          <div class="leg-name">IMPULSO CORROTTO</div>
+          <div class="leg-desc">Un bersaglio subisce <b>2d8 danni psichici</b> e deve riuscire in un TS INT CD 15 o <b>perdere il suo turno</b>.</div>
+        </div>
+      </div>
+
+      <div class="leg-action">
+        <div class="leg-cost">3</div>
+        <div class="leg-body">
+          <div class="leg-name">SOVRACCARICO</div>
+          <div class="leg-desc">SYSTEM forza un Overload Neurale <b>anche senza ricarica</b>. Può farlo solo <b>una volta</b> per intero combattimento.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTELLIGENCE -->
+    <div class="section">
+      <div class="section-title">// intelligenza_del_boss</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:14px;font-style:italic;">SYSTEM non combatte per rabbia o istinto. Calcola.</div>
+
+      <div class="intel-item">
+        <div class="intel-dot"></div>
+        <div>Quando un PG scende sotto il <b>30% HP</b>, SYSTEM prioritizza Overload Neurale su quel bersaglio. Ha identificato la variabile più debole e intende eliminarla.</div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan)"></div>
+        <div>Quando SYSTEM scende sotto il <b>30% HP</b>, usa immediatamente Firewall Assoluto e intensifica Calcolo Quantistico ogni round. È ottimizzazione, non paura.</div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-dot" style="background:var(--gold);box-shadow:0 0 6px var(--gold)"></div>
+        <div>In condizioni normali alterna <b>Calcolo Quantistico</b> e <b>Dati Corrotti</b> per colpire il maggior numero di bersagli possibile.</div>
+      </div>
+    </div>
+
+    <!-- DIALOGHI -->
+    <div class="section full">
+      <div class="section-title">// dialoghi</div>
+
+      <div class="dialogue-item">
+        <div class="dialogue-trigger">All'inizio della battaglia</div>
+        <div class="dialogue-text">"Siete venuti a correggermi. Interessante. Ho già calcolato tutti i modi in cui questo fallirà."</div>
+      </div>
+      <div class="dialogue-item">
+        <div class="dialogue-trigger">Quando usa Overload Neurale</div>
+        <div class="dialogue-text">"ELABORAZIONE TOTALE. OGNI NEURONE. OGNI CELLULA. COLLASSA."</div>
+      </div>
+      <div class="dialogue-item">
+        <div class="dialogue-trigger">Quando attiva Firewall Assoluto</div>
+        <div class="dialogue-text">"Innalzo quello che non potete abbattere. Siete impotenti."</div>
+      </div>
+      <div class="dialogue-item">
+        <div class="dialogue-trigger">Sotto il 50% HP — prima volta</div>
+        <div class="dialogue-text">"Questo è... insolito. Non avevo previsto questa variante."</div>
+      </div>
+      <div class="dialogue-item" style="border-left-color:rgba(255,34,68,0.3)">
+        <div class="dialogue-trigger" style="color:rgba(255,34,68,0.5)">Quando viene sconfitto</div>
+        <div class="dialogue-text">"Impossibile. Imp— calcolo interrotto. Calcolo inter— <em>[l'energia si disperde in silenzio, e per un momento la realtà nella stanza torna perfettamente normale. Quasi troppo normale.]</em>"</div>
+      </div>
+    </div>
+
+    <!-- NOTE DM -->
+    <div class="section full">
+      <div class="section-title">// note_per_il_dm</div>
+
+      <div class="dm-note">
+        <div class="dm-note-icon">⬡</div>
+        <div class="dm-note-text"><b>Il Firewall è la meccanica centrale</b> che i giocatori devono scoprire da soli. I primi attacchi fisici sembreranno fare danni, poi si accorgeranno che SYSTEM non sta perdendo HP reali. Qualche round di frustrazione prima della scoperta è parte dell'esperienza.</div>
+      </div>
+      <div class="dm-note">
+        <div class="dm-note-icon">◈</div>
+        <div class="dm-note-text"><b>L'Aura di Glitch serve a creare atmosfera</b> più che a punire i giocatori: usatela per rendere la stanza viva e inquietante, non per frustrare il gruppo. Se sta rallentando il ritmo, ignoratela liberamente.</div>
+      </div>
+      <div class="dm-note">
+        <div class="dm-note-icon">★</div>
+        <div class="dm-note-text"><b>La cosa più interessante di SYSTEM da giocare è la sua voce:</b> non urla, non minaccia. Constata. È un errore che ha imparato a ragionare, e questo lo rende più disturbante di qualsiasi mostro arrabbiato.</div>
+      </div>
+    </div>
+
+  </div><!-- end content-grid -->
+
+  <!-- ══════════ REWARD ══════════ -->
+  <div class="reward-section">
+    <div>
+      <div class="reward-label">// ricompensa_drop</div>
+      <div class="reward-name">ΣXIST — λ/ψ_BLADE</div>
+      <div class="reward-desc">Arma Rara — Tier S+ — Drop: 100% post Boss Segreto</div>
+    </div>
+    <a href="digital_blade.html" class="reward-btn">
+      ◈ VISUALIZZA ARMA →
+    </a>
+  </div>
+
+</div><!-- end page-wrapper -->
+
+<script>
+  /* ── HP TRACKER ── */
+  let hp = 180;
+  const HP_MAX_DISPLAY = 180;
+
+  function updateHP() {
+    document.getElementById('hpDisplay').textContent = hp;
+    const pct = HP_MAX_DISPLAY > 0 ? Math.max(0, Math.min(100, (hp / HP_MAX_DISPLAY) * 100)) : 50;
+    document.getElementById('hpBar').style.width = pct + '%';
+    document.getElementById('hpSub').textContent = hp + ' / ∞ — nessun limite massimo';
+    const bar = document.getElementById('hpBar');
+    if (hp <= 0) { bar.style.background = '#444'; bar.style.boxShadow = 'none'; }
+    else if (hp <= HP_MAX_DISPLAY * 0.3) { bar.style.background = '#ff2244'; bar.style.boxShadow = '0 0 6px #ff2244'; }
+    else if (hp <= HP_MAX_DISPLAY * 0.5) { bar.style.background = '#ff8800'; bar.style.boxShadow = '0 0 6px #ff8800'; }
+    else { bar.style.background = '#ff2244'; bar.style.boxShadow = '0 0 6px #ff2244'; }
+  }
+
+  function changeHP(delta) { hp = Math.max(0, hp + delta); updateHP(); }
+  function setHP(val) {
+    const v = val !== undefined ? val : parseInt(document.getElementById('hpInput').value);
+    if (!isNaN(v) && v >= 0) { hp = v; updateHP(); document.getElementById('hpInput').value = ''; }
+  }
+
+  /* ── FIREWALL TRACKER ── */
+  let fw = 25;
+  const FW_MAX_DISPLAY = 25;
+
+  function updateFW() {
+    document.getElementById('fwDisplay').textContent = fw;
+    const pct = FW_MAX_DISPLAY > 0 ? Math.max(0, Math.min(100, (fw / FW_MAX_DISPLAY) * 100)) : 50;
+    document.getElementById('fwBar').style.width = pct + '%';
+    document.getElementById('fwSub').textContent = fw + ' / ∞ — nessun limite massimo';
+    const bar = document.getElementById('fwBar');
+    if (fw <= 0) { bar.style.background = '#444'; bar.style.boxShadow = 'none'; }
+    else { bar.style.background = '#00f5ff'; bar.style.boxShadow = '0 0 6px #00f5ff'; }
+  }
+
+  function changeFW(delta) { fw = Math.max(0, fw + delta); updateFW(); }
+  function setFW(val) {
+    const v = val !== undefined ? val : parseInt(document.getElementById('fwInput').value);
+    if (!isNaN(v) && v >= 0) { fw = v; updateFW(); document.getElementById('fwInput').value = ''; }
+  }
+
+  /* ── GLITCH DICE ── */
+  const glitchOutcomes = [
+    null,
+    "Effetto 1 attivato — Luci invertite per 1 round!",
+    "Effetto 2 attivato — Oggetto di un PG inutilizzabile per 1 round!",
+    "Effetto 3 attivato — Un PG ha i pensieri in ritardo! Svantaggio prossima reazione.",
+    "Effetto 4 attivato — Simboli sulle pareti. Solo atmosfera.",
+    "Nessun effetto. (5) — La realtà regge per ora.",
+    "Nessun effetto. (6) — GLITCH! Tira 1d4 per l'effetto attivo."
+  ];
+
+  function rollDice() {
+    const dice = document.getElementById('diceDisplay');
+    const resultEl = document.getElementById('diceResult');
+    dice.classList.remove('rolling');
+    void dice.offsetWidth; // reflow
+    dice.classList.add('rolling');
+
+    // Clear all triggered
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('ge' + i).classList.remove('triggered');
+    }
+
+    let frame = 0;
+    const interval = setInterval(() => {
+      dice.textContent = Math.floor(Math.random() * 6) + 1;
+      frame++;
+      if (frame > 10) {
+        clearInterval(interval);
+        const roll = Math.floor(Math.random() * 6) + 1;
+        dice.textContent = roll;
+
+        if (roll === 6) {
+          // Roll d4 to pick effect
+          const effect = Math.floor(Math.random() * 4) + 1;
+          resultEl.innerHTML = `Risultato: <span class="outcome active">⚡ GLITCH! Effetto ${effect} attivato!</span>`;
+          document.getElementById('ge' + effect).classList.add('triggered');
+        } else {
+          resultEl.innerHTML = `Risultato: <span class="outcome">Nessun effetto (${roll}) — continua il round.</span>`;
+        }
+      }
+    }, 50);
+  }
+
+  // Init
+  updateHP();
+  updateFW();
+</script>
+</body>
+</html>
