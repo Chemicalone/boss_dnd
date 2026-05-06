@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronovex — Boss Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #080a0f;
+    --bg2:       #0d1018;
+    --bg3:       #111520;
+    --border:    #2a2f45;
+    --gold:      #c9a84c;
+    --gold2:     #f0c060;
+    --silver:    #8aa0c0;
+    --red:       #c0392b;
+    --redglow:   #e74c3c;
+    --blue:      #3a6ea8;
+    --purple:    #7b4fc2;
+    --teal:      #2a8a8a;
+    --phase1:    #2a7a3a;
+    --phase2:    #8a6a20;
+    --phase3:    #8a2020;
+    --text:      #dde0ee;
+    --muted:     #7a80a0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 16px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ── BACKGROUND EFFECT ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(50,30,100,.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(100,30,30,.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 50%, rgba(10,20,50,.4) 0%, transparent 80%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .header .subtitle {
+    font-family: 'Cinzel', serif;
+    color: var(--muted);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    color: var(--gold2);
+    text-shadow: 0 0 40px rgba(201,168,76,.5), 0 2px 4px #000;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .header .alias {
+    font-family: 'Cinzel', serif;
+    font-size: .9rem;
+    color: var(--silver);
+    letter-spacing: .12em;
+    font-style: italic;
+  }
+  .cr-badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: rgba(201,168,76,.12);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    padding: 3px 14px;
+    border-radius: 2px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── HP ── */
+  .hp-block { text-align: center; }
+  .hp-display {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    color: var(--redglow);
+    text-shadow: 0 0 30px rgba(231,76,60,.4);
+    line-height: 1;
+    transition: color .3s, text-shadow .3s;
+  }
+  .hp-display.phase2 { color: #d4a020; text-shadow: 0 0 30px rgba(212,160,32,.4); }
+  .hp-display.phase3 { color: var(--red); text-shadow: 0 0 40px rgba(192,57,43,.7), 0 0 80px rgba(192,57,43,.3); }
+  .hp-label {
+    font-family: 'Cinzel', serif;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .hp-max-display {
+    font-size: .95rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .hp-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .hp-input {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    padding: 7px 12px;
+    width: 90px;
+    text-align: center;
+    border-radius: 3px;
+    outline: none;
+  }
+  .hp-input:focus { border-color: var(--gold); }
+  .hp-btn {
+    background: none;
+    border: 1px solid;
+    font-family: 'Cinzel', serif;
+    font-size: .85rem;
+    padding: 7px 16px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background .2s, color .2s;
+    letter-spacing: .05em;
+  }
+  .hp-btn.dmg { border-color: var(--red); color: var(--red); }
+  .hp-btn.heal { border-color: var(--phase1); color: #4aaa5a; }
+  .hp-btn.set  { border-color: var(--silver); color: var(--silver); }
+  .hp-btn:hover { background: rgba(255,255,255,.08); }
+
+  .hp-set-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .hp-set-input {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    font-size: .9rem;
+    padding: 6px 10px;
+    width: 110px;
+    text-align: center;
+    border-radius: 3px;
+    outline: none;
+  }
+  .hp-set-input:focus { border-color: var(--silver); }
+
+  /* ── PHASE BAR ── */
+  .phase-bar-wrap { margin: 16px 0 4px; }
+  .phase-bar-track {
+    height: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .phase-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width .5s ease, background .5s;
+    background: linear-gradient(90deg, var(--red), var(--redglow));
+  }
+  .phase-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: .65rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+  .phase-indicator {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .15em;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-top: 8px;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .ph1 { border-color: var(--phase1); color: #4aaa5a; background: rgba(42,122,58,.1); }
+  .ph2 { border-color: var(--phase2); color: #c8a030; background: rgba(138,106,32,.1); }
+  .ph3 { border-color: var(--phase3); color: #dd4040; background: rgba(138,32,32,.1); animation: pulseph3 1.5s infinite; }
+  @keyframes pulseph3 { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 14px rgba(200,40,40,.5)} }
+
+  /* ── STATS GRID ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    text-align: center;
+  }
+  @media(max-width:500px){ .stats-grid { grid-template-columns: repeat(3,1fr); } }
+  .stat-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px 4px;
+  }
+  .stat-name { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .12em; color: var(--muted); margin-bottom: 4px; }
+  .stat-score { font-family: 'Cinzel Decorative', serif; font-size: 1.4rem; color: var(--gold2); line-height: 1; }
+  .stat-mod { font-size: .85rem; color: var(--silver); margin-top: 2px; }
+
+  /* ── SAVES / INFO ── */
+  .info-row {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 0;
+  }
+  .info-pill {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 6px 14px;
+    font-size: .9rem;
+    display: flex; gap: 6px; align-items: center;
+  }
+  .info-pill .pill-label { font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .12em; color: var(--muted); }
+  .info-pill .pill-val { color: var(--gold); font-weight: 600; }
+
+  /* ── ANCHORS ── */
+  .anchors-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .anchor-gem {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: radial-gradient(circle at 35% 35%, #f0e060, #c8a020 60%, #6a4000);
+    cursor: pointer;
+    transition: transform .2s, opacity .2s, box-shadow .2s;
+    box-shadow: 0 0 18px rgba(201,168,76,.6), 0 0 6px rgba(255,240,100,.4);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .anchor-gem.destroyed {
+    background: radial-gradient(circle at 35% 35%, #444, #222 60%, #111);
+    border-color: #444;
+    box-shadow: none;
+    opacity: .4;
+  }
+  .anchor-gem::after {
+    content: '⧖';
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    color: rgba(0,0,0,.5);
+  }
+  .anchor-gem.destroyed::after { content: '✕'; color: #666; font-size: .9rem; }
+  .anchor-note { font-size: .9rem; color: var(--muted); font-style: italic; }
+
+  /* ── TRAITS ── */
+  .trait { margin-bottom: 14px; }
+  .trait:last-child { margin-bottom: 0; }
+  .trait-name { font-family: 'Cinzel', serif; font-size: .8rem; letter-spacing: .1em; color: var(--gold); margin-bottom: 4px; }
+  .trait-text { color: var(--text); line-height: 1.65; font-size: .97rem; }
+  .trait-text em { color: var(--silver); font-style: normal; font-weight: 600; }
+
+  /* ── ACTIONS ── */
+  .action { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .action:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .action-name { font-family: 'Cinzel', serif; font-size: .82rem; letter-spacing: .1em; color: var(--gold2); margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+  .action-type { font-size: .62rem; padding: 2px 8px; border-radius: 2px; letter-spacing: .1em; text-transform: uppercase; }
+  .tag-action    { background: rgba(58,110,168,.25); border: 1px solid var(--blue); color: #7ab0e8; }
+  .tag-legendary { background: rgba(123,79,194,.25); border: 1px solid var(--purple); color: #b090e8; }
+  .action-text { color: var(--text); line-height: 1.65; font-size: .95rem; }
+
+  /* ── DICE ROLLER ── */
+  .dice-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .12em;
+    padding: 4px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background .2s, box-shadow .2s;
+  }
+  .dice-btn:hover { background: rgba(201,168,76,.12); box-shadow: 0 0 10px rgba(201,168,76,.2); }
+  .dice-btn.red-dice { border-color: var(--redglow); color: var(--redglow); }
+  .dice-btn.red-dice:hover { background: rgba(231,76,60,.1); }
+  .dice-btn.blue-dice { border-color: var(--silver); color: var(--silver); }
+  .dice-btn.blue-dice:hover { background: rgba(138,160,192,.1); }
+
+  .dice-result {
+    display: inline-block;
+    margin-left: 10px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem;
+    color: var(--gold2);
+    min-width: 60px;
+    transition: all .15s;
+  }
+  .dice-result.pari  { color: #60d080; }
+  .dice-result.dispari { color: #e07060; }
+  .dice-result.flash { transform: scale(1.3); }
+
+  .dice-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
+  /* ── PHASE SECTION ── */
+  .phase-block {
+    border-left: 3px solid var(--border);
+    padding-left: 14px;
+    margin-bottom: 16px;
+  }
+  .phase-block.ph1-block { border-color: var(--phase1); }
+  .phase-block.ph2-block { border-color: var(--phase2); }
+  .phase-block.ph3-block { border-color: var(--phase3); }
+  .phase-block .phase-head {
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    margin-bottom: 5px;
+  }
+  .phase-block.ph1-block .phase-head { color: #4aaa5a; }
+  .phase-block.ph2-block .phase-head { color: #c8a030; }
+  .phase-block.ph3-block .phase-head { color: #dd4040; }
+  .phase-block p { color: var(--text); font-size: .95rem; line-height: 1.65; }
+
+  /* ── LOOT BUTTON ── */
+  .loot-btn {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(201,168,76,.08), rgba(201,168,76,.18));
+    border: 1px solid var(--gold);
+    color: var(--gold2);
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    padding: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background .25s, box-shadow .25s, transform .15s;
+    margin-top: 10px;
+  }
+  .loot-btn:hover {
+    background: linear-gradient(135deg, rgba(201,168,76,.18), rgba(201,168,76,.32));
+    box-shadow: 0 0 30px rgba(201,168,76,.25);
+    transform: translateY(-1px);
+  }
+  .loot-btn .loot-icon { font-size: 1.4rem; }
+
+  /* ── BACK BUTTON ── */
+  .back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    padding: 8px 18px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    transition: border-color .2s, color .2s;
+  }
+  .back-btn:hover { border-color: var(--silver); color: var(--silver); }
+
+  /* ── LOOT PAGE ── */
+  .weapon-header { text-align: center; padding: 36px 0 24px; }
+  .weapon-header .w-type {
+    font-family: 'Cinzel', serif; font-size: .7rem; letter-spacing: .3em; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .weapon-header h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.4rem, 5vw, 2.4rem);
+    color: var(--gold2);
+    text-shadow: 0 0 40px rgba(201,168,76,.4);
+    margin-bottom: 6px;
+  }
+  .weapon-header .w-sub {
+    font-family: 'Cinzel', serif; font-size: .82rem; color: var(--silver); letter-spacing: .1em; font-style: italic;
+  }
+  .rarity-badge {
+    display: inline-block; margin-top: 12px;
+    padding: 4px 18px; border-radius: 2px;
+    font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .18em;
+    background: rgba(123,79,194,.2); border: 1px solid var(--purple); color: #c0a0ee;
+  }
+
+  .weapon-art {
+    text-align: center;
+    margin: 24px 0;
+    font-size: 5rem;
+    filter: drop-shadow(0 0 20px rgba(201,168,76,.4));
+    animation: floatAxe 3s ease-in-out infinite;
+  }
+  @keyframes floatAxe { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-10px) rotate(5deg)} }
+
+  .w-stat-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 4px; }
+  .w-pill {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 3px; padding: 6px 16px;
+    font-size: .9rem; display: flex; gap: 6px; align-items: baseline;
+  }
+  .w-pill-label { font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .12em; color: var(--muted); }
+  .w-pill-val { color: var(--gold); font-weight: 600; }
+
+  .ability {
+    margin-bottom: 16px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ability:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .ability-name { font-family: 'Cinzel', serif; font-size: .82rem; letter-spacing: .1em; color: var(--gold2); margin-bottom: 5px; }
+  .ability-tag {
+    display: inline-block; font-size: .62rem; padding: 2px 8px; border-radius: 2px;
+    letter-spacing: .1em; margin-left: 8px; vertical-align: middle;
+  }
+  .tag-passive   { background: rgba(42,138,138,.2); border: 1px solid var(--teal); color: #70c8c8; }
+  .tag-attunement{ background: rgba(123,79,194,.2); border: 1px solid var(--purple); color: #c0a0ee; }
+  .tag-carica    { background: rgba(200,80,30,.2); border: 1px solid #c05030; color: #e09070; }
+  .ability-text { color: var(--text); line-height: 1.7; font-size: .95rem; }
+
+  hr.sep { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+  /* ── DIVIDER ── */
+  .ornament { text-align: center; color: var(--border); font-size: .9rem; margin: 6px 0 18px; letter-spacing: .3em; }
+
+  /* ── RESULT TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--bg2); border: 1px solid var(--gold);
+    color: var(--gold2); font-family: 'Cinzel', serif;
+    padding: 12px 28px; border-radius: 4px;
+    font-size: .95rem; letter-spacing: .1em;
+    box-shadow: 0 4px 30px rgba(0,0,0,.6);
+    transition: transform .3s ease, opacity .3s;
+    opacity: 0; z-index: 999;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════ BOSS PAGE ══ -->
+<div id="pageBoss" class="page active">
+<div class="wrap">
+
+  <div class="header">
+    <div class="subtitle">Scheda Boss — D&D 5e</div>
+    <h1>Chronovex</h1>
+    <div class="alias">nato come Alaric Ravenloft</div>
+    <div class="cr-badge">Mostro Leggendario · Grande Male</div>
+  </div>
+
+  <!-- HP -->
+  <div class="card">
+    <div class="card-title">Punti Ferita</div>
+    <div class="hp-block">
+      <div class="hp-label">HP ATTUALI</div>
+      <div class="hp-display" id="hpDisplay">400</div>
+      <div class="hp-max-display">/ <span id="hpMaxDisplay">400</span> max</div>
+
+      <div class="hp-controls">
+        <input class="hp-input" id="hpAmt" type="number" min="0" placeholder="Quantità" value="0">
+        <button class="hp-btn dmg" onclick="changeHP(-1)">— Danno</button>
+        <button class="hp-btn heal" onclick="changeHP(1)">+ Cura</button>
+      </div>
+
+      <div class="hp-set-row">
+        <input class="hp-set-input" id="hpNewVal" type="number" placeholder="Nuovo valore HP">
+        <button class="hp-btn set" onclick="setHP()">Imposta HP</button>
+        <input class="hp-set-input" id="hpMaxVal" type="number" placeholder="Nuovo max HP">
+        <button class="hp-btn set" onclick="setMaxHP()">Imposta Max</button>
+      </div>
+
+      <div class="phase-bar-wrap">
+        <div class="phase-bar-track"><div class="phase-bar-fill" id="hpBar" style="width:100%"></div></div>
+        <div class="phase-labels">
+          <span>Fase 3 ▸ 0</span>
+          <span>Fase 2 ▸ 134</span>
+          <span>Fase 1 ▸ 267</span>
+          <span>MAX ▸ <span id="phLabelMax">400</span></span>
+        </div>
+      </div>
+      <div><span class="phase-indicator ph1" id="phaseIndicator">Fase 1 — Battaglia Normale</span></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card">
+    <div class="card-title">Statistiche</div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-name">FOR</div><div class="stat-score">20</div><div class="stat-mod">+5</div></div>
+      <div class="stat-box"><div class="stat-name">DES</div><div class="stat-score">14</div><div class="stat-mod">+2</div></div>
+      <div class="stat-box"><div class="stat-name">COS</div><div class="stat-score">18</div><div class="stat-mod">+4</div></div>
+      <div class="stat-box"><div class="stat-name">INT</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
+      <div class="stat-box"><div class="stat-name">SAG</div><div class="stat-score">12</div><div class="stat-mod">+1</div></div>
+      <div class="stat-box"><div class="stat-name">CAR</div><div class="stat-score">—</div><div class="stat-mod">—</div></div>
+    </div>
+  </div>
+
+  <!-- INFO RAPIDE -->
+  <div class="card">
+    <div class="card-title">Informazioni Rapide</div>
+    <div class="info-row">
+      <div class="info-pill"><span class="pill-label">CA</span><span class="pill-val">16</span></div>
+      <div class="info-pill"><span class="pill-label">Velocità</span><span class="pill-val">40 ft / 20 ft volo</span></div>
+      <div class="info-pill"><span class="pill-label">TS Cos</span><span class="pill-val">+8</span></div>
+      <div class="info-pill"><span class="pill-label">TS Sag</span><span class="pill-val">+5</span></div>
+      <div class="info-pill"><span class="pill-label">TS For</span><span class="pill-val">+9</span></div>
+      <div class="info-pill"><span class="pill-label">Critico</span><span class="pill-val">19–20</span></div>
+      <div class="info-pill"><span class="pill-label">Attacco</span><span class="pill-val">+9 al colpire</span></div>
+    </div>
+  </div>
+
+  <!-- ANCORE TEMPORALI -->
+  <div class="card">
+    <div class="card-title">⧖ Ancore Temporali</div>
+    <div class="anchors-row">
+      <div class="anchor-gem" id="anc0" onclick="toggleAnchor(0)" title="Ancora 1 — clicca per distruggere"></div>
+      <div class="anchor-gem" id="anc1" onclick="toggleAnchor(1)" title="Ancora 2 — clicca per distruggere"></div>
+      <div class="anchor-gem" id="anc2" onclick="toggleAnchor(2)" title="Ancora 3 — clicca per distruggere"></div>
+      <div>
+        <div id="anchorStatus" style="font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.1em;color:var(--gold);margin-bottom:4px;">3 ANCORE ATTIVE — IMMORTALE</div>
+        <div class="anchor-note">Finché almeno un'ancora esiste, Chronovex può resettare il tempo e tornare in vita. Clicca un'ancora per segnalarla come distrutta.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRATTI PASSIVI -->
+  <div class="card">
+    <div class="card-title">Tratti Passivi</div>
+
+    <div class="trait">
+      <div class="trait-name">Senso del Tempo</div>
+      <div class="trait-text">Chronovex ha <em>vantaggio</em> su tutti i tiri per colpire. Il tempo è solo un libro da leggere — ogni mossa è già stata vista. Critico con <em>19–20</em>.</div>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Aura Cromatica</div>
+      <div class="trait-text">Chiunque inizi il proprio turno entro <em>15 ft</em> da Chronovex deve superare un <em>TS su COS CD 14</em> o subire danno e rallentare.</div>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" onclick="rollDice(1,6,'aura','Aura Cromatica — Danno')">🎲 Tira 1d6 Danno</button>
+        <span class="dice-result" id="res-aura"></span>
+      </div>
+      <div style="margin-top:4px;font-size:.85rem;color:var(--muted);">In caso di fallimento: danno necrotico + <em>lentezza</em> (ultimo in iniziativa questo round).</div>
+    </div>
+  </div>
+
+  <!-- AZIONI -->
+  <div class="card">
+    <div class="card-title">Azioni</div>
+
+    <div class="action">
+      <div class="action-name">Multiattacco <span class="action-type tag-action">Azione</span></div>
+      <div class="action-text">
+        Effettua <em>2 attacchi</em> con l'ascia.<br>
+        <strong>1° turno:</strong> può muoversi e attaccare normalmente.<br>
+        <strong>2° turno:</strong> non può spostarsi, solo attaccare.<br><br>
+        <strong>Attacco con arma:</strong> +9 al colpire · Portata 5 ft · 1 bersaglio.<br>
+        <em>Danni:</em> 2d8 + 7 taglienti + 1d6 forza.<br>
+        <em>TS COS CD 15</em> o <strong>Desync</strong>: svantaggio sul prossimo turno + lentezza.
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">Momento Fermo <span class="action-type tag-action">Azione</span></div>
+      <div class="action-text">
+        Chronovex ferma il tempo per <em>1 turno intero</em>. Tutte le creature sono <em>paralizzate</em>.<br>
+        Alla fine del turno, subisce danni su se stesso.
+      </div>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" id="btnMomentoFermo" onclick="rollMomentoFermo()">🎲 Danno Autoinferto (Fase 1–2: 2d6 · Fase 3: 4d6)</button>
+        <span class="dice-result" id="res-momento"></span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">Impulso Retroverso <span class="action-type tag-action">Azione</span></div>
+      <div class="action-text">
+        Un bersaglio viene riportato nella <em>posizione occupata all'inizio del suo turno precedente</em>. Non cambiano HP, effetti, risorse spese — solo la posizione fisica.
+      </div>
+    </div>
+  </div>
+
+  <!-- AZIONI LEGGENDARIE -->
+  <div class="card">
+    <div class="card-title">Azioni Leggendarie</div>
+
+    <div class="action">
+      <div class="action-name">Passo Temporale <span class="action-type tag-legendary">Leggendaria</span></div>
+      <div class="action-text">Chronovex si teletrasporta in qualsiasi punto che riesce a vedere, senza azioni di opportunità.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">Distorsione Locale <span class="action-type tag-legendary">Leggendaria</span></div>
+      <div class="action-text">
+        Tira un dado: <em>pari → TS COS CD 15</em>; se il bersaglio fallisce, tira di nuovo.<br>
+        · Pari: tempo accelerato → 2d8 danni.<br>
+        · Dispari: tempo rallentato → svantaggio per 1 turno.<br>
+        <em>Dispari (tiro iniziale):</em> nessun effetto questo round.
+      </div>
+      <div class="dice-row">
+        <button class="dice-btn" onclick="rollDistorsione()">🎲 Tira Distorsione Locale</button>
+        <span class="dice-result" id="res-distorsione"></span>
+      </div>
+      <div id="res-distorsione-detail" style="margin-top:6px;font-size:.88rem;color:var(--silver);min-height:1.2em;"></div>
+    </div>
+  </div>
+
+  <!-- FASI -->
+  <div class="card">
+    <div class="card-title">Suddivisione a Fasi</div>
+
+    <div class="phase-block ph1-block">
+      <div class="phase-head">FASE 1 — 400 → 267 HP</div>
+      <p>Battaglia normale. Nessun effetto speciale aggiuntivo oltre ai tratti di base.</p>
+    </div>
+
+    <div class="ornament">· · · ✦ · · ·</div>
+
+    <div class="phase-block ph2-block">
+      <div class="phase-head">FASE 2 — 267 → 134 HP</div>
+      <p>Ogni <em>2 round</em>, Chronovex consegna a un personaggio un dado del destino.<br>
+      Tira: pari → <strong>Visioni del Passato</strong> · dispari → <strong>Visioni del Futuro</strong>.</p>
+      <div class="dice-row">
+        <button class="dice-btn blue-dice" onclick="rollVisions()">🎲 Dado del Destino (Fase 2)</button>
+        <span class="dice-result" id="res-vision"></span>
+      </div>
+      <div id="res-vision-detail" style="margin-top:6px;font-size:.88rem;color:var(--silver);min-height:1.2em;"></div>
+    </div>
+
+    <div class="ornament">· · · ✦ · · ·</div>
+
+    <div class="phase-block ph3-block">
+      <div class="phase-head">FASE 3 — 134 → 0 HP</div>
+      <p>All'inizio di ogni turno di Chronovex, tira 1d6 per l'instabilità temporale:</p>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" onclick="rollPhase3()">🎲 1d6 Instabilità Temporale (Fase 3)</button>
+        <span class="dice-result" id="res-phase3"></span>
+      </div>
+      <div id="res-phase3-detail" style="margin-top:6px;font-size:.9rem;min-height:1.5em;"></div>
+      <div style="margin-top:10px;font-size:.88rem;color:var(--muted);">
+        1–2: Turno normale &nbsp;·&nbsp; 3–4: Turno perso (bloccato nel tempo) &nbsp;·&nbsp; 5–6: Azione extra gratuita (accelerato nel futuro)
+      </div>
+    </div>
+  </div>
+
+  <!-- LOOT -->
+  <div class="card">
+    <div class="card-title">Loot del Boss</div>
+    <button class="loot-btn" onclick="showPage('pageLoot')">
+      <span class="loot-icon">🪓</span>
+      VEDERE L'ASCIA — CRONO-FRANTUMATRICE
+      <span class="loot-icon">✨</span>
+    </button>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /pageBoss -->
+
+
+<!-- ══════════════════════════════════════════════ LOOT PAGE ══ -->
+<div id="pageLoot" class="page">
+<div class="wrap">
+
+  <button class="back-btn" onclick="showPage('pageBoss')">← Torna alla Scheda Boss</button>
+
+  <div class="weapon-header">
+    <div class="w-type">Arma Leggendaria · Ascia da Guerra</div>
+    <h1>Crono-Frantumatrice</h1>
+    <div class="w-sub">forgiata nel Vuoto tra un Secondo e l'Altro</div>
+    <div class="rarity-badge">Leggendaria · Richiede Attunement</div>
+  </div>
+
+  <div class="weapon-art">🪓</div>
+
+  <div class="card">
+    <div class="card-title">Proprietà di Base</div>
+    <div class="w-stat-row">
+      <div class="w-pill"><span class="w-pill-label">Tipo</span><span class="w-pill-val">Ascia da Guerra</span></div>
+      <div class="w-pill"><span class="w-pill-label">Danno Base</span><span class="w-pill-val">2d8 + 7 taglienti</span></div>
+      <div class="w-pill"><span class="w-pill-label">Bonus</span><span class="w-pill-val">+2 al colpire e ai danni</span></div>
+      <div class="w-pill"><span class="w-pill-label">Proprietà</span><span class="w-pill-val">Versatile (2d10)</span></div>
+      <div class="w-pill"><span class="w-pill-label">Peso</span><span class="w-pill-val">4 kg</span></div>
+      <div class="w-pill"><span class="w-pill-label">Dano Forza</span><span class="w-pill-val">+1d6 forza</span></div>
+    </div>
+    <div style="margin-top:14px;font-size:.95rem;color:var(--muted);font-style:italic;line-height:1.7;">
+      La lama è incisa con glyph che cambiano disposizione ogni alba. Il manico emana un lieve ronzio, come un orologio che batte troppo in fretta. Chiunque la impugni percepisce il passare dei secondi con insopportabile nitidezza.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Come Funziona l'Attunement</div>
+    <div style="font-size:.97rem;line-height:1.75;color:var(--text);">
+      La Crono-Frantumatrice è un'arma <em>cosciente e resistente</em>. Non si lascia padroneggiare da chiunque — chi vuole accedere alle sue abilità speciali deve prima convincerla di essere degno.<br><br>
+      <strong style="font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.08em;color:var(--gold);">PROCEDURA DI ATTUNEMENT</strong><br><br>
+      <strong>1. Riposo Breve o Lungo.</strong> Il personaggio deve tenere l'arma in mano per l'intera durata di un riposo (breve o lungo), meditando sul suo potere temporale.<br><br>
+      <strong>2. Tiro su Intelligenza CD 14.</strong> Al termine del riposo, il personaggio effettua un <em>tiro su INT CD 14</em>. L'arma sonda la mente del portatore — solo chi ha volontà e lucidità sufficienti riesce a stabilire il legame.<br><br>
+      <div style="background:rgba(42,138,138,.08);border:1px solid var(--teal);border-radius:3px;padding:12px 16px;margin:8px 0;">
+        <span style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.15em;color:#70c8c8;">✔ SUCCESSO</span><br>
+        Sei in attunement. Le abilità contrassegnate con <span style="background:rgba(123,79,194,.2);border:1px solid var(--purple);color:#c0a0ee;font-size:.72rem;padding:1px 7px;border-radius:2px;font-family:'Cinzel',serif;letter-spacing:.08em;">Attunement</span> sono ora attive.
+      </div>
+      <div style="background:rgba(192,57,43,.08);border:1px solid var(--red);border-radius:3px;padding:12px 16px;margin:8px 0;">
+        <span style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.15em;color:#e07060;">✘ FALLIMENTO</span><br>
+        L'arma ti ha rigettato. Non ottieni le abilità di Attunement. Puoi riprovare al prossimo riposo, ma ogni fallimento è un avvertimento — la lama non dimentica.
+      </div>
+      <span style="font-size:.88rem;color:var(--muted);font-style:italic;">Nota: le abilità Passive e le Cariche (Squarcio Cronale) funzionano per chiunque impugni l'arma, anche senza attunement.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Abilità Speciali</div>
+
+    <div class="ability">
+      <div class="ability-name">Fendente Temporale <span class="ability-tag tag-passive">Passiva</span></div>
+      <div class="ability-text">
+        Ogni colpo inferto con la Crono-Frantumatrice impone al bersaglio un <em>TS su COS CD 15</em>. In caso di fallimento, il bersaglio subisce l'effetto <strong>Desync</strong>: ha svantaggio su tutti i tiri nel suo prossimo turno e risulta <em>ultimo in iniziativa</em> per quel round.
+      </div>
+    </div>
+
+    <div class="ability">
+      <div class="ability-name">Eco dell'Impatto <span class="ability-tag tag-passive">Passiva</span></div>
+      <div class="ability-text">
+        Quando ottieni un critico, il danno non viene solo raddoppiato — il colpo <em>risuona nel tempo</em>. Il bersaglio subisce il danno del critico anche all'inizio del suo turno successivo (come eco temporale, non dimezzabile). Questo effetto non si cumula.
+      </div>
+    </div>
+
+    <div class="ability">
+      <div class="ability-name">Àncora Spezzata <span class="ability-tag tag-attunement">Attunement</span></div>
+      <div class="ability-text">
+        Mentre sei in attunement con la Crono-Frantumatrice, hai <em>vantaggio sui TS contro effetti di rallentamento e paralisi</em>. L'energia temporale dell'arma forma uno scudo invisibile attorno al portatore, respingendo istintivamente le distorsioni del tempo.
+      </div>
+    </div>
+
+    <div class="ability">
+      <div class="ability-name">Squarcio Cronale <span class="ability-tag tag-carica">3 Cariche/giorno</span></div>
+      <div class="ability-text">
+        Come <em>azione bonus</em>, spendi una carica per lanciare l'ascia attraverso un punto nel tempo adiacente. L'attacco colpisce un bersaglio entro 30 ft senza richiedere linea di vista diretta: il colpo <em>arriva un istante prima</em> che il bersaglio si muova.<br><br>
+        Se colpisce, oltre ai danni normali, il bersaglio viene <em>riposizionato</em> di 10 ft in una direzione a scelta dell'attaccante (come Impulso Retroverso in miniatura). Le cariche si rigenerano all'alba.
+      </div>
+    </div>
+
+    <div class="ability">
+      <div class="ability-name">Maledizione del Portatore <span class="ability-tag tag-attunement">Attunement</span></div>
+      <div class="ability-text">
+        La lama non dimentica chi l'ha creata. Chi porta la Crono-Frantumatrice in attunement sogna frammenti della vita di Alaric Ravenloft — i suoi ricordi, la sua natura di demone, il momento in cui i suoi poteri si sono risvegliati trasformando una mente già fragile in qualcosa di completamente spezzato. Chronovex non è ciò che Alan è <em>diventato</em> — è ciò che Alan <em>era sempre stato</em>.<br><br>
+        Ogni alba, il portatore deve superare un <em>TS su SAG CD 12</em> o perdere 1 punto di Sanità Mentale (se usate le regole opzionali). Tuttavia, finché rimane in attunement, l'arma non può essere rubata o disarmata magicamente contro la volontà del portatore.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card" style="text-align:center;padding:20px;">
+    <div style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;color:var(--muted);margin-bottom:8px;">ISCRIZIONE SULLA LAMA</div>
+    <div style="font-style:italic;color:var(--silver);font-size:1.05rem;line-height:1.8;">
+      "Il futuro è già successo.<br>Il passato non è ancora finito.<br>L'unico errore è credere di avere tempo."
+    </div>
+    <div style="margin-top:8px;font-family:'Cinzel',serif;font-size:.65rem;color:var(--border);">— Alaric Ravenloft, prima della Frattura</div>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /pageLoot -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+let hpMax = 400;
+let hpCurrent = 400;
+const anchorState = [true, true, true];
+
+// ── HP ──
+function updateHPDisplay() {
+  const pct = Math.max(0, Math.min(100, (hpCurrent / hpMax) * 100));
+  const disp = document.getElementById('hpDisplay');
+  const bar  = document.getElementById('hpBar');
+
+  disp.textContent = hpCurrent;
+  document.getElementById('hpMaxDisplay').textContent = hpMax;
+  document.getElementById('phLabelMax').textContent = hpMax;
+  bar.style.width = pct + '%';
+
+  // Phase thresholds are relative to max
+  const ph2threshold = Math.round(hpMax * (267/400));
+  const ph3threshold = Math.round(hpMax * (134/400));
+
+  let phase, phaseClass;
+  if (hpCurrent > ph2threshold) {
+    phase = 'Fase 1 — Battaglia Normale'; phaseClass = 'ph1';
+  } else if (hpCurrent > ph3threshold) {
+    phase = 'Fase 2 — Visioni del Destino'; phaseClass = 'ph2';
+  } else {
+    phase = 'Fase 3 — Instabilità Temporale'; phaseClass = 'ph3';
+  }
+
+  const ind = document.getElementById('phaseIndicator');
+  ind.textContent = phase;
+  ind.className = 'phase-indicator ' + phaseClass;
+
+  disp.className = 'hp-display';
+  if (phaseClass === 'ph2') disp.classList.add('phase2');
+  if (phaseClass === 'ph3') disp.classList.add('phase3');
+
+  // bar color
+  if (phaseClass === 'ph3') {
+    bar.style.background = 'linear-gradient(90deg,#8a2020,#dd4040)';
+  } else if (phaseClass === 'ph2') {
+    bar.style.background = 'linear-gradient(90deg,#8a6a20,#d4a020)';
+  } else {
+    bar.style.background = 'linear-gradient(90deg,var(--red),var(--redglow))';
+  }
+}
+
+function changeHP(sign) {
+  const amt = parseInt(document.getElementById('hpAmt').value) || 0;
+  hpCurrent = Math.max(0, hpCurrent + sign * amt);
+  updateHPDisplay();
+}
+
+function setHP() {
+  const v = parseInt(document.getElementById('hpNewVal').value);
+  if (!isNaN(v) && v >= 0) { hpCurrent = v; updateHPDisplay(); }
+}
+
+function setMaxHP() {
+  const v = parseInt(document.getElementById('hpMaxVal').value);
+  if (!isNaN(v) && v > 0) { hpMax = v; updateHPDisplay(); }
+}
+
+// ── ANCHORS ──
+function toggleAnchor(i) {
+  anchorState[i] = !anchorState[i];
+  document.getElementById('anc' + i).classList.toggle('destroyed', !anchorState[i]);
+  const active = anchorState.filter(Boolean).length;
+  const status = document.getElementById('anchorStatus');
+  if (active === 0) {
+    status.textContent = '0 ANCORE — PUÒ ESSERE UCCISO DEFINITIVAMENTE';
+    status.style.color = '#dd4040';
+  } else {
+    status.textContent = active + (active === 1 ? ' ANCORA ATTIVA — QUASI VULNERABILE' : ' ANCORE ATTIVE — IMMORTALE');
+    status.style.color = active === 1 ? '#d4a020' : 'var(--gold)';
+  }
+}
+
+// ── DICE ──
+function roll(n, sides) {
+  let total = 0;
+  const rolls = [];
+  for (let i = 0; i < n; i++) {
+    const r = Math.floor(Math.random() * sides) + 1;
+    rolls.push(r); total += r;
+  }
+  return { total, rolls };
+}
+
+function flashResult(id, text, cssClass='') {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'dice-result ' + cssClass;
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 200);
+}
+
+function rollDice(n, sides, resultId, label) {
+  const { total, rolls } = roll(n, sides);
+  flashResult('res-' + resultId, `${total} (${rolls.join('+')})`);
+  showToast(`${label}: ${total}`);
+}
+
+function rollMomentoFermo() {
+  // Check phase
+  const ph2 = Math.round(hpMax * (134/400));
+  const isPhase3 = hpCurrent <= ph2;
+  const n = isPhase3 ? 4 : 2;
+  const { total, rolls } = roll(n, 6);
+  flashResult('res-momento', `${total} (${rolls.join('+')})`);
+  showToast(`Momento Fermo ${isPhase3 ? '(Fase 3)' : '(Fase 1–2)'}: ${total} danni autoinflicci`);
+}
+
+function rollDistorsione() {
+  const r1 = Math.floor(Math.random() * 6) + 1;
+  const pari1 = r1 % 2 === 0;
+  let result = `Dado: ${r1} (${pari1 ? 'PARI' : 'DISPARI'}) → `;
+  let detail = '';
+
+  if (!pari1) {
+    result += 'Nessun effetto';
+    detail = '⟶ Il tempo rimane stabile questo round.';
+    flashResult('res-distorsione', `${r1} — Dispari`, 'dispari');
+  } else {
+    result += 'TS COS CD 15! Se fallisce, ';
+    const r2 = Math.floor(Math.random() * 6) + 1;
+    const pari2 = r2 % 2 === 0;
+    if (pari2) {
+      const { total, rolls } = roll(2, 8);
+      result += `→ ${r2} (Pari): Tempo accelerato — 2d8 = ${total} danni`;
+      detail = `⟶ Tempo ACCELERATO: ${total} danni (${rolls.join('+')}). Bersaglio proiettato nel futuro.`;
+      flashResult('res-distorsione', `${r1}→${r2} — Danno ${total}`, '');
+    } else {
+      result += `→ ${r2} (Dispari): Tempo rallentato — svantaggio 1 turno`;
+      detail = '⟶ Tempo RALLENTATO: svantaggio su tutti i tiri per 1 turno intero.';
+      flashResult('res-distorsione', `${r1}→${r2} — Lentezza`, 'dispari');
+    }
+  }
+  document.getElementById('res-distorsione-detail').textContent = detail;
+  showToast('Distorsione Locale: ' + result);
+}
+
+function rollVisions() {
+  const r = Math.floor(Math.random() * 6) + 1;
+  const pari = r % 2 === 0;
+  flashResult('res-vision', `${r} — ${pari ? 'PARI' : 'DISPARI'}`, pari ? 'pari' : 'dispari');
+  const detail = pari
+    ? '⟶ Visioni del PASSATO — il personaggio rivive un momento già vissuto.'
+    : '⟶ Visioni del FUTURO — il personaggio intravede qualcosa che deve ancora accadere.';
+  document.getElementById('res-vision-detail').textContent = detail;
+  showToast('Dado del Destino: ' + r + (pari ? ' — Passato' : ' — Futuro'));
+}
+
+function rollPhase3() {
+  const { total } = roll(1, 6);
+  let cssClass = '';
+  let detail = '';
+  if (total <= 2) {
+    detail = `⟶ ${total}: Turno NORMALE. Nessun effetto aggiuntivo.`;
+    cssClass = '';
+  } else if (total <= 4) {
+    detail = `⟶ ${total}: TURNO PERSO. Chronovex rimane bloccato nel tempo — salta l'intero turno.`;
+    cssClass = 'dispari';
+  } else {
+    detail = `⟶ ${total}: AZIONE EXTRA GRATUITA. Chronovex viene accelerato nel futuro — ottiene un'azione bonus aggiuntiva.`;
+    cssClass = 'pari';
+  }
+  flashResult('res-phase3', String(total), cssClass);
+  document.getElementById('res-phase3-detail').textContent = detail;
+  document.getElementById('res-phase3-detail').style.color =
+    total <= 2 ? 'var(--silver)' : total <= 4 ? '#e07060' : '#60d080';
+  showToast('Instabilità Fase 3: ' + total);
+}
+
+// ── PAGES ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── INIT ──
+updateHPDisplay();
+</script>
+</body>
+</html>
