@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azan — Boss Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #080a0f;
+    --bg2:       #0d1018;
+    --bg3:       #111520;
+    --border:    #2a2f45;
+    --gold:      #c9a84c;
+    --gold2:     #f0c060;
+    --silver:    #8aa0c0;
+    --red:       #c0392b;
+    --redglow:   #e74c3c;
+    --blue:      #3a6ea8;
+    --purple:    #7b4fc2;
+    --teal:      #2a8a8a;
+    --crimson:   #8b1a1a;
+    --crimsonglow:#c0302a;
+    --ash:       #4a3a5a;
+    --phase1:    #2a7a3a;
+    --phase2:    #8a6a20;
+    --phase3:    #8a2020;
+    --text:      #dde0ee;
+    --muted:     #7a80a0;
+    --silent:    #4a3060;
+    --silentglow:#8060c0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 16px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(100,20,20,.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(60,10,80,.20) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 50%, rgba(10,5,20,.5) 0%, transparent 80%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* Particelle di cenere demoniaca */
+  .embers {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .ember {
+    position: absolute;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    background: rgba(180, 40, 20, .6);
+    animation: floatEmber linear infinite;
+  }
+  @keyframes floatEmber {
+    0%   { transform: translateY(100vh) translateX(0) scale(1); opacity: 0; }
+    10%  { opacity: .8; }
+    90%  { opacity: .4; }
+    100% { transform: translateY(-80px) translateX(calc(var(--drift, 0px))) scale(.3); opacity: 0; }
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .header .subtitle {
+    font-family: 'Cinzel', serif;
+    color: var(--muted);
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    color: var(--crimsonglow);
+    text-shadow: 0 0 40px rgba(192,48,42,.6), 0 0 80px rgba(100,10,10,.4), 0 2px 4px #000;
+    line-height: 1.1;
+    margin-bottom: 4px;
+    animation: pulseTitle 4s ease-in-out infinite;
+  }
+  @keyframes pulseTitle {
+    0%,100% { text-shadow: 0 0 40px rgba(192,48,42,.6), 0 0 80px rgba(100,10,10,.4), 0 2px 4px #000; }
+    50% { text-shadow: 0 0 60px rgba(192,48,42,.9), 0 0 120px rgba(140,20,10,.5), 0 2px 4px #000; }
+  }
+  .header .alias {
+    font-family: 'Cinzel', serif;
+    font-size: .9rem;
+    color: var(--silver);
+    letter-spacing: .12em;
+    font-style: italic;
+  }
+  .cr-badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: rgba(192,48,42,.12);
+    border: 1px solid var(--crimsonglow);
+    color: var(--crimsonglow);
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    padding: 3px 14px;
+    border-radius: 2px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── HP ── */
+  .hp-block { text-align: center; }
+  .hp-display {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    color: var(--redglow);
+    text-shadow: 0 0 30px rgba(231,76,60,.4);
+    line-height: 1;
+    transition: color .3s, text-shadow .3s;
+  }
+  .hp-display.phase2 { color: #d4a020; text-shadow: 0 0 30px rgba(212,160,32,.4); }
+  .hp-display.phase3 { color: var(--red); text-shadow: 0 0 40px rgba(192,57,43,.7), 0 0 80px rgba(192,57,43,.3); }
+  .hp-label { font-family: 'Cinzel', serif; font-size: .7rem; letter-spacing: .2em; color: var(--muted); margin-bottom: 6px; }
+  .hp-max-display { font-size: .95rem; color: var(--muted); margin-bottom: 16px; }
+  .hp-controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .hp-input {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    font-family: 'Cinzel', serif; font-size: 1rem; padding: 7px 12px; width: 90px;
+    text-align: center; border-radius: 3px; outline: none;
+  }
+  .hp-input:focus { border-color: var(--gold); }
+  .hp-btn {
+    background: none; border: 1px solid; font-family: 'Cinzel', serif;
+    font-size: .85rem; padding: 7px 16px; cursor: pointer; border-radius: 3px;
+    transition: background .2s, color .2s; letter-spacing: .05em;
+  }
+  .hp-btn.dmg  { border-color: var(--red); color: var(--red); }
+  .hp-btn.heal { border-color: var(--phase1); color: #4aaa5a; }
+  .hp-btn.set  { border-color: var(--silver); color: var(--silver); }
+  .hp-btn:hover { background: rgba(255,255,255,.08); }
+  .hp-set-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .hp-set-input {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    font-family: 'Cinzel', serif; font-size: .9rem; padding: 6px 10px; width: 110px;
+    text-align: center; border-radius: 3px; outline: none;
+  }
+  .hp-set-input:focus { border-color: var(--silver); }
+
+  /* ── PHASE BAR ── */
+  .phase-bar-wrap { margin: 16px 0 4px; }
+  .phase-bar-track { height: 10px; background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 8px; }
+  .phase-bar-fill { height: 100%; border-radius: 5px; transition: width .5s ease, background .5s; background: linear-gradient(90deg, var(--red), var(--redglow)); }
+  .phase-labels { display: flex; justify-content: space-between; font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .1em; color: var(--muted); }
+  .phase-indicator { display: inline-block; font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .15em; padding: 4px 14px; border-radius: 2px; margin-top: 8px; text-transform: uppercase; border: 1px solid; }
+  .ph1 { border-color: var(--phase1); color: #4aaa5a; background: rgba(42,122,58,.1); }
+  .ph2 { border-color: var(--phase2); color: #c8a030; background: rgba(138,106,32,.1); }
+  .ph3 { border-color: var(--phase3); color: #dd4040; background: rgba(138,32,32,.1); animation: pulseph3 1.5s infinite; }
+  @keyframes pulseph3 { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 14px rgba(200,40,40,.5)} }
+
+  /* ── STATS GRID ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; text-align: center; }
+  @media(max-width:500px){ .stats-grid { grid-template-columns: repeat(3,1fr); } }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; padding: 10px 4px; }
+  .stat-name { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .12em; color: var(--muted); margin-bottom: 4px; }
+  .stat-score { font-family: 'Cinzel Decorative', serif; font-size: 1.4rem; color: var(--gold2); line-height: 1; }
+  .stat-mod { font-size: .85rem; color: var(--silver); margin-top: 2px; }
+
+  /* ── SAVES / INFO ── */
+  .info-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .info-pill { background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; padding: 6px 14px; font-size: .9rem; display: flex; gap: 6px; align-items: center; }
+  .info-pill .pill-label { font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .12em; color: var(--muted); }
+  .info-pill .pill-val { color: var(--gold); font-weight: 600; }
+
+  /* ── TRAITS ── */
+  .trait { margin-bottom: 14px; }
+  .trait:last-child { margin-bottom: 0; }
+  .trait-name { font-family: 'Cinzel', serif; font-size: .8rem; letter-spacing: .1em; color: var(--gold); margin-bottom: 4px; }
+  .trait-text { color: var(--text); line-height: 1.65; font-size: .97rem; }
+  .trait-text em { color: var(--silver); font-style: normal; font-weight: 600; }
+
+  /* ── ACTIONS ── */
+  .action { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .action:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .action-name { font-family: 'Cinzel', serif; font-size: .82rem; letter-spacing: .1em; color: var(--gold2); margin-bottom: 5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .action-type { font-size: .62rem; padding: 2px 8px; border-radius: 2px; letter-spacing: .1em; text-transform: uppercase; }
+  .tag-action    { background: rgba(58,110,168,.25); border: 1px solid var(--blue); color: #7ab0e8; }
+  .tag-legendary { background: rgba(123,79,194,.25); border: 1px solid var(--purple); color: #b090e8; }
+  .tag-silent    { background: rgba(60,30,80,.35); border: 1px solid var(--silentglow); color: #c0a0ee; }
+  .tag-bonus     { background: rgba(42,138,138,.2); border: 1px solid var(--teal); color: #70c8c8; }
+  .action-text { color: var(--text); line-height: 1.65; font-size: .95rem; }
+
+  /* SILENZIOSA label speciale */
+  .silent-label {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: .62rem; padding: 2px 8px; border-radius: 2px; letter-spacing: .1em;
+    background: rgba(60,30,80,.35); border: 1px solid var(--silentglow); color: #c0a0ee;
+    font-family: 'Cinzel', serif; text-transform: uppercase;
+    animation: silentPulse 3s ease-in-out infinite;
+  }
+  @keyframes silentPulse { 0%,100%{opacity:.7} 50%{opacity:1; box-shadow:0 0 8px rgba(128,96,192,.4)} }
+
+  /* ── DICE ROLLER ── */
+  .dice-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: 1px solid var(--gold); color: var(--gold);
+    font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .12em;
+    padding: 4px 12px; border-radius: 3px; cursor: pointer; margin-top: 8px;
+    transition: background .2s, box-shadow .2s;
+  }
+  .dice-btn:hover { background: rgba(201,168,76,.12); box-shadow: 0 0 10px rgba(201,168,76,.2); }
+  .dice-btn.red-dice { border-color: var(--redglow); color: var(--redglow); }
+  .dice-btn.red-dice:hover { background: rgba(231,76,60,.1); }
+  .dice-btn.blue-dice { border-color: var(--silver); color: var(--silver); }
+  .dice-btn.blue-dice:hover { background: rgba(138,160,192,.1); }
+  .dice-btn.purple-dice { border-color: var(--silentglow); color: var(--silentglow); }
+  .dice-btn.purple-dice:hover { background: rgba(128,96,192,.1); }
+
+  .dice-result { display: inline-block; margin-left: 10px; font-family: 'Cinzel Decorative', serif; font-size: 1rem; color: var(--gold2); min-width: 60px; transition: all .15s; }
+  .dice-result.pari  { color: #60d080; }
+  .dice-result.dispari { color: #e07060; }
+  .dice-result.flash { transform: scale(1.3); }
+  .dice-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
+  /* ── PHASE SECTION ── */
+  .phase-block { border-left: 3px solid var(--border); padding-left: 14px; margin-bottom: 16px; }
+  .phase-block.ph1-block { border-color: var(--phase1); }
+  .phase-block.ph2-block { border-color: var(--phase2); }
+  .phase-block.ph3-block { border-color: var(--phase3); }
+  .phase-block .phase-head { font-family: 'Cinzel', serif; font-size: .75rem; letter-spacing: .15em; margin-bottom: 5px; }
+  .phase-block.ph1-block .phase-head { color: #4aaa5a; }
+  .phase-block.ph2-block .phase-head { color: #c8a030; }
+  .phase-block.ph3-block .phase-head { color: #dd4040; }
+  .phase-block p { color: var(--text); font-size: .95rem; line-height: 1.65; }
+
+  hr.sep { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+  .ornament { text-align: center; color: var(--border); font-size: .9rem; margin: 6px 0 18px; letter-spacing: .3em; }
+
+  /* ── TOAST ── */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--bg2); border: 1px solid var(--crimsonglow); color: var(--crimsonglow); font-family: 'Cinzel', serif; padding: 12px 28px; border-radius: 4px; font-size: .95rem; letter-spacing: .1em; box-shadow: 0 4px 30px rgba(0,0,0,.6); transition: transform .3s ease, opacity .3s; opacity: 0; z-index: 999; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ── NOTA SILENZIOSA ── */
+  .silent-note {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(60,30,80,.2); border: 1px solid rgba(128,96,192,.35);
+    border-radius: 3px; padding: 10px 14px; margin-top: 8px;
+    font-size: .88rem; color: var(--silver); line-height: 1.6;
+  }
+  .silent-note .sn-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<!-- Particelle -->
+<div class="embers" id="embers"></div>
+
+<!-- ════════════════════════════════════ BOSS PAGE ════ -->
+<div id="pageBoss" class="page active">
+<div class="wrap">
+
+  <div class="header">
+    <div class="subtitle">Scheda Boss — D&D 5e</div>
+    <h1>Azan</h1>
+    <div class="alias">nato come Alaric Ravenloft — la Voce del Silenzio</div>
+    <div class="cr-badge">Demone Maggiore · Grande Male</div>
+  </div>
+
+  <!-- HP -->
+  <div class="card">
+    <div class="card-title">Punti Ferita</div>
+    <div class="hp-block">
+      <div class="hp-label">HP ATTUALI</div>
+      <div class="hp-display" id="hpDisplay">380</div>
+      <div class="hp-max-display">/ <span id="hpMaxDisplay">380</span> max</div>
+      <div class="hp-controls">
+        <input class="hp-input" id="hpAmt" type="number" min="0" placeholder="Quantità" value="0">
+        <button class="hp-btn dmg" onclick="changeHP(-1)">— Danno</button>
+        <button class="hp-btn heal" onclick="changeHP(1)">+ Cura</button>
+      </div>
+      <div class="hp-set-row">
+        <input class="hp-set-input" id="hpNewVal" type="number" placeholder="Nuovo valore HP">
+        <button class="hp-btn set" onclick="setHP()">Imposta HP</button>
+        <input class="hp-set-input" id="hpMaxVal" type="number" placeholder="Nuovo max HP">
+        <button class="hp-btn set" onclick="setMaxHP()">Imposta Max</button>
+      </div>
+      <div class="phase-bar-wrap">
+        <div class="phase-bar-track"><div class="phase-bar-fill" id="hpBar" style="width:100%"></div></div>
+        <div class="phase-labels">
+          <span>Fase 3 ▸ 0</span>
+          <span>Fase 2 ▸ 127</span>
+          <span>Fase 1 ▸ 254</span>
+          <span>MAX ▸ <span id="phLabelMax">380</span></span>
+        </div>
+      </div>
+      <div><span class="phase-indicator ph1" id="phaseIndicator">Fase 1 — Battaglia Normale</span></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card">
+    <div class="card-title">Statistiche</div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-name">FOR</div><div class="stat-score">22</div><div class="stat-mod">+6</div></div>
+      <div class="stat-box"><div class="stat-name">DES</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
+      <div class="stat-box"><div class="stat-name">COS</div><div class="stat-score">20</div><div class="stat-mod">+5</div></div>
+      <div class="stat-box"><div class="stat-name">INT</div><div class="stat-score">14</div><div class="stat-mod">+2</div></div>
+      <div class="stat-box"><div class="stat-name">SAG</div><div class="stat-score">10</div><div class="stat-mod">+0</div></div>
+      <div class="stat-box"><div class="stat-name">CAR</div><div class="stat-score">18</div><div class="stat-mod">+4</div></div>
+    </div>
+  </div>
+
+  <!-- INFO RAPIDE -->
+  <div class="card">
+    <div class="card-title">Informazioni Rapide</div>
+    <div class="info-row">
+      <div class="info-pill"><span class="pill-label">CA</span><span class="pill-val">17</span></div>
+      <div class="info-pill"><span class="pill-label">Velocità</span><span class="pill-val">40 ft / 30 ft volo</span></div>
+      <div class="info-pill"><span class="pill-label">TS Cos</span><span class="pill-val">+9</span></div>
+      <div class="info-pill"><span class="pill-label">TS Car</span><span class="pill-val">+8</span></div>
+      <div class="info-pill"><span class="pill-label">TS For</span><span class="pill-val">+10</span></div>
+      <div class="info-pill"><span class="pill-label">Critico</span><span class="pill-val">19–20</span></div>
+      <div class="info-pill"><span class="pill-label">Attacco</span><span class="pill-val">+10 al colpire</span></div>
+      <div class="info-pill"><span class="pill-label">Immunità</span><span class="pill-val">Fuoco · Veleno · Charme</span></div>
+      <div class="info-pill"><span class="pill-label">Resist.</span><span class="pill-val">Necrotico · Psichico</span></div>
+    </div>
+  </div>
+
+  <!-- TRATTI PASSIVI -->
+  <div class="card">
+    <div class="card-title">Tratti Passivi</div>
+
+    <div class="trait">
+      <div class="trait-name">Istinto Predatorio</div>
+      <div class="trait-text">Azan ha <em>vantaggio</em> su tutti i tiri per colpire contro creature che non hanno ancora agito nel round corrente. Critico con <em>19–20</em>.</div>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Aura Infernale</div>
+      <div class="trait-text">Chiunque inizi il proprio turno entro <em>15 ft</em> da Azan deve superare un <em>TS su COS CD 15</em> o subire danno da fuoco infernale e risultare <em>spaventato</em> per 1 round.</div>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" onclick="rollDice(1,8,'aura','Aura Infernale — Danno')">🎲 Tira 1d8 Danno</button>
+        <span class="dice-result" id="res-aura"></span>
+      </div>
+      <div style="margin-top:4px;font-size:.85rem;color:var(--muted);">Fallimento: danno fuoco infernale + <em>spaventato</em> fino all'inizio del prossimo turno.</div>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Carne Demonizzata</div>
+      <div class="trait-text">Azan è <em>immune</em> a veleno e fuoco. <em>Resistente</em> a danni necrotici e psichici. Le armi non magiche gli infliggono solo metà danno.</div>
+    </div>
+  </div>
+
+  <!-- AZIONI -->
+  <div class="card">
+    <div class="card-title">Azioni</div>
+
+    <div class="action">
+      <div class="action-name">Multiattacco <span class="action-type tag-action">Azione</span></div>
+      <div class="action-text">
+        Effettua <em>2 attacchi</em> con gli artigli demoniaci, oppure 1 artiglio + 1 attacco speciale.<br>
+        <strong>1° turno:</strong> può muoversi e attaccare normalmente.<br>
+        <strong>2° turno:</strong> non può spostarsi, solo attaccare.<br><br>
+        <em>Nota del DM:</em> In Fase 3 ottiene un terzo attacco.
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">Artigli dell'Abisso <span class="action-type tag-action">Azione</span></div>
+      <div class="action-text">
+        <strong>Attacco con arma:</strong> +10 al colpire · Portata 10 ft · 1 bersaglio.<br>
+        <em>Danni:</em> 2d8 + 6 taglienti + 1d6 fuoco infernale.<br>
+        <em>TS CON CD 16</em> o <strong>Lacerazione</strong>: il bersaglio sanguina — subisce 1d6 danni necrotici all'inizio di ogni suo turno (max 3 round, cura qualunque azione).
+      </div>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" onclick="rollDice(2,8,'artigli','Artigli — Danni taglienti')">🎲 2d8+6 Tagl.</button>
+        <span class="dice-result" id="res-artigli"></span>
+        <button class="dice-btn red-dice" onclick="rollDice(1,6,'artfuoco','Artigli — Fuoco infernale')">🎲 1d6 Fuoco</button>
+        <span class="dice-result" id="res-artfuoco"></span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">
+        Sussurro della Dannazione
+        <span class="silent-label">🔇 Silenziosa</span>
+        <span class="action-type tag-action">Azione</span>
+      </div>
+      <div class="action-text">
+        Azan posa uno sguardo fisso su una creatura entro <em>60 ft</em>. <strong>Non si vede nulla accadere.</strong> Il bersaglio deve superare un <em>TS su CAR CD 16</em> o subire danni psichici e avere <em>svantaggio su tutti i TS</em> fino alla fine del prossimo round. Nessuna componente verbale, nessun effetto visivo.
+      </div>
+      <div class="silent-note">
+        <span class="sn-icon">🔇</span>
+        <span><strong>Attacco silenziosa:</strong> gli altri giocatori non capiscono immediatamente cosa stia succedendo. Il DM descrive solo che il bersaglio trasalisce leggermente, come se avesse sentito qualcosa nella testa.</span>
+      </div>
+      <div class="dice-row">
+        <button class="dice-btn purple-dice" onclick="rollDice(3,8,'sussurro','Sussurro della Dannazione — Psichico')">🎲 3d8 Psichico</button>
+        <span class="dice-result" id="res-sussurro"></span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">
+        Maledizione Silenziosa
+        <span class="silent-label">🔇 Silenziosa</span>
+        <span class="action-type tag-action">Azione</span>
+      </div>
+      <div class="action-text">
+        Azan traccia un glyph invisibile nell'aria con un solo dito teso. <strong>Dall'esterno sembra un gesto insignificante.</strong> Una creatura entro <em>30 ft</em> viene maledetta: ha <em>svantaggio su tiri per colpire e tiri abilità</em> per 1 minuto. <em>TS su SAG CD 15</em> per annullare. La maledizione è invisibile anche al bersaglio — deve fare un tiro Percezione Arcana CD 18 per capire di essere maledetto.
+      </div>
+      <div class="silent-note">
+        <span class="sn-icon">🔇</span>
+        <span><strong>Attacco silenziosa:</strong> il DM nota segretamente il bersaglio. Gli effetti sembrano sfortuna finché qualcuno non individua la maledizione.</span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">Pugno di Fuoco Infernale <span class="action-type tag-action">Azione</span></div>
+      <div class="action-text">
+        Azan scaglia una sfera di fuoco nero. <strong>Attacco a distanza:</strong> +8 al colpire · Gittata 60 ft · 1 bersaglio.<br>
+        <em>Danni:</em> 4d6 fuoco infernale. Il fuoco infernale <em>non può essere spento da mezzi normali</em> — il bersaglio brucia per 1d6 fuoco aggiuntivo all'inizio del suo turno per 2 round (<em>TS COS CD 14</em> per terminare).
+      </div>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" onclick="rollDice(4,6,'pugno','Pugno Infernale — Fuoco')">🎲 4d6 Fuoco Nero</button>
+        <span class="dice-result" id="res-pugno"></span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">
+        Tocco dell'Oblio
+        <span class="silent-label">🔇 Silenziosa</span>
+        <span class="action-type tag-action">Azione</span>
+      </div>
+      <div class="action-text">
+        Azan sfiora appena una creatura adiacente — sembra quasi un gesto accidentale nel combattimento. La creatura deve superare un <em>TS su INT CD 15</em> o <strong>dimenticare l'ultimo minuto di combattimento</strong>: perde tutte le risorse spese durante quel periodo (slot incantesimo, cariche, ecc.) e torna con le risorse che aveva 1 minuto fa. <em>Non recupera gli HP persi.</em>
+      </div>
+      <div class="silent-note">
+        <span class="sn-icon">🔇</span>
+        <span><strong>Attacco silenziosa:</strong> il bersaglio è confuso — sa di aver combattuto, ma le ultime azioni gli sembrano sfumate. Il DM gestisce le risorse in segreto.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AZIONI LEGGENDARIE -->
+  <div class="card">
+    <div class="card-title">Azioni Leggendarie <span style="font-size:.7rem;color:var(--muted);font-family:'EB Garamond',serif;font-style:italic;margin-left:8px;">(3/round, al termine del turno altrui)</span></div>
+
+    <div class="action">
+      <div class="action-name">Balzo Abissale <span class="action-type tag-legendary">Leggendaria</span></div>
+      <div class="action-text">Azan si teletrasporta fino a <em>40 ft</em> in un punto visibile. Non provoca attacchi di opportunità. Lascia una nube di fumo oscuro che oscura un'area 5 ft per 1 round.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">
+        Corruzione Silenziosa
+        <span class="silent-label">🔇 Silenziosa</span>
+        <span class="action-type tag-legendary">Leggendaria</span>
+      </div>
+      <div class="action-text">
+        Azan <strong>non fa nulla di visibile</strong>. Una creatura entro 30 ft deve superare un <em>TS su COS CD 14</em> o subire danni necrotici. Il DM annuncia i danni senza spiegare la fonte.
+      </div>
+      <div class="silent-note">
+        <span class="sn-icon">🔇</span>
+        <span><strong>Attacco silenziosa:</strong> il DM dice solo "senti una fitta bruciante nel petto, senza motivo apparente."</span>
+      </div>
+      <div class="dice-row">
+        <button class="dice-btn purple-dice" onclick="rollDice(2,8,'corruzione','Corruzione Silenziosa — Necrotico')">🎲 2d8 Necrotico</button>
+        <span class="dice-result" id="res-corruzione"></span>
+      </div>
+    </div>
+
+    <div class="action">
+      <div class="action-name">Ruggito Demonico <span class="action-type tag-legendary">Leggendaria</span> <span style="font-size:.62rem;color:var(--muted);font-family:'Cinzel',serif;letter-spacing:.08em;">(2 azioni)</span></div>
+      <div class="action-text">
+        Azan emette un urlo che risuona su più piani di esistenza. Ogni creatura entro <em>30 ft</em> deve superare un <em>TS su SAG CD 16</em> o essere <em>spaventata e stordita</em> per 1 round. Le creature che lo superano sono invece solo spaventate per 1 round.
+      </div>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" onclick="rollRuggito()">🎲 Ruggito — Tira CD salvezza</button>
+        <span class="dice-result" id="res-ruggito"></span>
+      </div>
+      <div id="res-ruggito-detail" style="margin-top:6px;font-size:.88rem;color:var(--silver);min-height:1.2em;"></div>
+    </div>
+  </div>
+
+  <!-- FASI -->
+  <div class="card">
+    <div class="card-title">Suddivisione a Fasi</div>
+
+    <div class="phase-block ph1-block">
+      <div class="phase-head">FASE 1 — 380 → 254 HP</div>
+      <p>Battaglia normale. Azan usa gli attacchi fisici e le azioni silenziose con cautela, studiando gli avversari. <em>Nessun effetto speciale aggiuntivo.</em></p>
+    </div>
+
+    <div class="ornament">· · · ⛧ · · ·</div>
+
+    <div class="phase-block ph2-block">
+      <div class="phase-head">FASE 2 — 254 → 127 HP</div>
+      <p>L'Ira Abissale si risveglia. Ogni <em>2 round</em>, Azan emette un'<strong>Aura di Paura Silenziosa</strong>:<br>
+      ogni creatura entro 20 ft deve superare un <em>TS su SAG CD 15</em> o essere <em>spaventata per 1 round</em>. <strong>Nessun suono, nessun effetto visivo</strong> — solo un brivido improvviso.</p>
+      <div class="dice-row">
+        <button class="dice-btn purple-dice" onclick="rollFase2()">🎲 Aura Silente (Fase 2)</button>
+        <span class="dice-result" id="res-fase2"></span>
+      </div>
+      <div id="res-fase2-detail" style="margin-top:6px;font-size:.88rem;color:var(--silver);min-height:1.2em;"></div>
+    </div>
+
+    <div class="ornament">· · · ⛧ · · ·</div>
+
+    <div class="phase-block ph3-block">
+      <div class="phase-head">FASE 3 — 127 → 0 HP</div>
+      <p>La Forma Demoniaca si libera. All'inizio di ogni turno di Azan, tira 1d6 per la <em>Frenesia Abissale</em>:</p>
+      <div class="dice-row">
+        <button class="dice-btn red-dice" onclick="rollFase3()">🎲 1d6 Frenesia Abissale (Fase 3)</button>
+        <span class="dice-result" id="res-fase3"></span>
+      </div>
+      <div id="res-fase3-detail" style="margin-top:6px;font-size:.9rem;min-height:1.5em;"></div>
+      <div style="margin-top:10px;font-size:.88rem;color:var(--muted);">
+        1–2: Turno normale &nbsp;·&nbsp; 3–4: <strong>Incarnazione</strong> — ottiene +2 CA e FOR per 1 round &nbsp;·&nbsp; 5–6: <strong>Frenesia</strong> — attacca due volte in più come azione bonus
+      </div>
+    </div>
+  </div>
+
+
+</div><!-- /wrap -->
+</div><!-- /pageBoss -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── EMBERS ──
+(function() {
+  const container = document.getElementById('embers');
+  for (let i = 0; i < 25; i++) {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    const x = Math.random() * 100;
+    const duration = 8 + Math.random() * 14;
+    const delay = -Math.random() * duration;
+    const drift = (Math.random() - 0.5) * 120;
+    e.style.cssText = `left:${x}%;animation-duration:${duration}s;animation-delay:${delay}s;--drift:${drift}px;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;`;
+    container.appendChild(e);
+  }
+})();
+
+// ── STATE ──
+let hpMax = 380;
+let hpCurrent = 380;
+
+// ── HP ──
+function updateHPDisplay() {
+  const pct = Math.max(0, Math.min(100, (hpCurrent / hpMax) * 100));
+  const disp = document.getElementById('hpDisplay');
+  const bar  = document.getElementById('hpBar');
+
+  disp.textContent = hpCurrent;
+  document.getElementById('hpMaxDisplay').textContent = hpMax;
+  document.getElementById('phLabelMax').textContent = hpMax;
+  bar.style.width = pct + '%';
+
+  const ph2threshold = Math.round(hpMax * (254/380));
+  const ph3threshold = Math.round(hpMax * (127/380));
+
+  let phase, phaseClass;
+  if (hpCurrent > ph2threshold) {
+    phase = 'Fase 1 — Istinto Predatorio'; phaseClass = 'ph1';
+  } else if (hpCurrent > ph3threshold) {
+    phase = 'Fase 2 — Ira Abissale'; phaseClass = 'ph2';
+  } else {
+    phase = 'Fase 3 — Frenesia Demoniaca'; phaseClass = 'ph3';
+  }
+
+  const ind = document.getElementById('phaseIndicator');
+  ind.textContent = phase;
+  ind.className = 'phase-indicator ' + phaseClass;
+
+  disp.className = 'hp-display';
+  if (phaseClass === 'ph2') disp.classList.add('phase2');
+  if (phaseClass === 'ph3') disp.classList.add('phase3');
+
+  if (phaseClass === 'ph3') {
+    bar.style.background = 'linear-gradient(90deg,#8a2020,#dd4040)';
+  } else if (phaseClass === 'ph2') {
+    bar.style.background = 'linear-gradient(90deg,#8a6a20,#d4a020)';
+  } else {
+    bar.style.background = 'linear-gradient(90deg,var(--red),var(--redglow))';
+  }
+}
+
+function changeHP(sign) {
+  const amt = parseInt(document.getElementById('hpAmt').value) || 0;
+  hpCurrent = Math.max(0, hpCurrent + sign * amt);
+  updateHPDisplay();
+}
+
+function setHP() {
+  const v = parseInt(document.getElementById('hpNewVal').value);
+  if (!isNaN(v) && v >= 0) { hpCurrent = v; updateHPDisplay(); }
+}
+
+function setMaxHP() {
+  const v = parseInt(document.getElementById('hpMaxVal').value);
+  if (!isNaN(v) && v > 0) { hpMax = v; updateHPDisplay(); }
+}
+
+// ── DICE ──
+function roll(n, sides) {
+  let total = 0; const rolls = [];
+  for (let i = 0; i < n; i++) { const r = Math.floor(Math.random() * sides) + 1; rolls.push(r); total += r; }
+  return { total, rolls };
+}
+
+function flashResult(id, text, cssClass='') {
+  const el = document.getElementById(id);
+  el.textContent = text; el.className = 'dice-result ' + cssClass;
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 200);
+}
+
+function rollDice(n, sides, resultId, label) {
+  const { total, rolls } = roll(n, sides);
+  let bonus = 0;
+  if (resultId === 'artigli') bonus = 6;
+  const display = bonus ? `${total + bonus} (${rolls.join('+')}+${bonus})` : `${total} (${rolls.join('+')})`;
+  flashResult('res-' + resultId, display);
+  showToast(`${label}: ${total + bonus}`);
+}
+
+function rollRuggito() {
+  const r = Math.floor(Math.random() * 6) + 1;
+  const pari = r % 2 === 0;
+  flashResult('res-ruggito', String(r), pari ? 'pari' : 'dispari');
+  const detail = pari
+    ? `⟶ ${r} PARI — Effetto DOPPIO: creature stordite E spaventate per 1 round.`
+    : `⟶ ${r} DISPARI — Effetto SINGOLO: creature solo spaventate per 1 round.`;
+  document.getElementById('res-ruggito-detail').textContent = detail;
+  showToast('Ruggito Demonico: ' + r + (pari ? ' — Stordito + Spaventato' : ' — Solo Spaventato'));
+}
+
+function rollFase2() {
+  const { total, rolls } = roll(1, 6);
+  flashResult('res-fase2', String(total));
+  const passed = total > 3;
+  const detail = passed
+    ? `⟶ ${total}: Risultato alto — Aura silente attiva, TS SAG CD 15. Chi fallisce: spaventato 1 round.`
+    : `⟶ ${total}: Risultato basso — il brivido è appena percettibile. TS SAG CD 12 (ridotta).`;
+  document.getElementById('res-fase2-detail').textContent = detail;
+  showToast('Aura Silente Fase 2: ' + total);
+}
+
+function rollFase3() {
+  const { total } = roll(1, 6);
+  let cssClass = '', detail = '';
+  if (total <= 2) {
+    detail = `⟶ ${total}: Turno NORMALE. Nessun effetto aggiuntivo.`;
+  } else if (total <= 4) {
+    detail = `⟶ ${total}: INCARNAZIONE — Azan si gonfia di energia demoniaca. +2 CA e +2 FOR fino al prossimo turno.`;
+    cssClass = 'pari';
+  } else {
+    detail = `⟶ ${total}: FRENESIA — Azan ottiene un'azione bonus per effettuare due attacchi aggiuntivi con gli artigli.`;
+    cssClass = 'pari';
+  }
+  flashResult('res-fase3', String(total), cssClass);
+  const detEl = document.getElementById('res-fase3-detail');
+  detEl.textContent = detail;
+  detEl.style.color = total <= 2 ? 'var(--silver)' : '#e08060';
+  showToast('Frenesia Abissale Fase 3: ' + total);
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── INIT ──
+updateHPDisplay();
+</script>
+</body>
+</html>

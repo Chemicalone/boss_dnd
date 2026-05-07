@@ -137,6 +137,19 @@
 
     .boss-card:nth-child(2) { animation-delay: 0.15s; }
 
+    .boss-card.azan-card:hover .card-inner {
+      transform: translateY(-8px);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.8),
+        0 0 40px rgba(192,48,42,0.2),
+        inset 0 0 30px rgba(192,48,42,0.06);
+      border-color: #c0302a !important;
+    }
+    .boss-card.azan-card:hover .sigil-ring {
+      border-color: #c0302a !important;
+      box-shadow: 0 0 20px rgba(192,48,42,0.4), inset 0 0 20px rgba(192,48,42,0.06);
+    }
+
     /* Card frame */
     .card-inner {
       position: relative;
@@ -509,6 +522,33 @@
             <div class="dot"></div>
           </div>
           <p class="card-desc">Intelligenza primordiale che governa le leggi arcane. Freddo, implacabile, perfetto nella sua logica devastante.</p>
+          <div class="card-cta">
+            Apri la Scheda <span class="cta-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3: Azan -->
+      <a class="boss-card azan-card" href="vexarath_boss.html" style="animation-delay:0.30s;">
+        <div class="card-inner" style="background: linear-gradient(160deg, #1a0808 0%, #110606 50%, #0e0808 100%); border-color: #6a1a1a;">
+          <div class="glow-sweep" style="background: linear-gradient(135deg, rgba(192,48,42,0.1) 0%, transparent 60%);"></div>
+          <div class="boss-sigil">
+            <div class="sigil-ring" style="border-color: #6a1a1a; background: radial-gradient(circle, rgba(192,48,42,0.08) 0%, transparent 70%);">
+              <span class="sigil-icon" style="filter: drop-shadow(0 0 8px rgba(192,48,42,0.6));">⛧</span>
+            </div>
+          </div>
+          <p class="card-cr">Challenge Rating — Unknown</p>
+          <h2 class="card-title" style="color: #c0302a; text-shadow: 0 0 20px rgba(192,48,42,0.5);">Azan</h2>
+          <p class="card-type">Demone Maggiore • Boss</p>
+          <div class="card-divider"></div>
+          <div class="danger-dots">
+            <div class="dot bright"></div>
+            <div class="dot bright"></div>
+            <div class="dot bright"></div>
+            <div class="dot bright"></div>
+            <div class="dot bright"></div>
+          </div>
+          <p class="card-desc">La Voce del Silenzio. Colpisce senza che tu lo veda arrivare — il dolore che non senti è quello che ti spezza.</p>
           <div class="card-cta">
             Apri la Scheda <span class="cta-arrow">→</span>
           </div>
