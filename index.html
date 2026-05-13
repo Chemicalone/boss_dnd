@@ -407,6 +407,70 @@
       opacity: 0.7;
     }
 
+    /* ── SIDE ENCOUNTER SECTION ── */
+    .side-section {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      animation: fadeUp 0.8s ease 0.25s both;
+    }
+
+    .side-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 340px;
+    }
+
+    .side-label-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(138,156,212,0.3), transparent);
+    }
+
+    .side-label-text {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: rgba(138, 156, 212, 0.45);
+      white-space: nowrap;
+    }
+
+    /* Trent card — tema sogno */
+    .boss-card.trent-card::before,
+    .boss-card.trent-card::after {
+      border-color: #4a5a9a;
+    }
+
+    .boss-card.trent-card:hover .card-inner {
+      transform: translateY(-8px);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.8),
+        0 0 40px rgba(74,90,154,0.2),
+        inset 0 0 30px rgba(74,90,154,0.06);
+      border-color: #8b9cd4 !important;
+    }
+
+    .boss-card.trent-card:hover .sigil-ring {
+      border-color: #8b9cd4 !important;
+      box-shadow: 0 0 20px rgba(138,156,212,0.35), inset 0 0 20px rgba(138,156,212,0.06);
+    }
+
+    .boss-card.trent-card:hover .card-cta {
+      color: #8b9cd4;
+    }
+
+    .side-note {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: rgba(138,156,212,0.3);
+      text-align: center;
+      margin-top: -8px;
+    }
+
     /* Footer */
     .footer {
       margin-top: 60px;
@@ -501,33 +565,6 @@
         </div>
       </a>
 
-      <!-- Card 2: System Boss -->
-      <a class="boss-card" href="system_boss.html">
-        <div class="card-inner">
-          <div class="glow-sweep"></div>
-          <div class="boss-sigil">
-            <div class="sigil-ring">
-              <span class="sigil-icon">⬡</span>
-            </div>
-          </div>
-          <p class="card-cr">Challenge Rating — Unknown</p>
-          <h2 class="card-title">System</h2>
-          <p class="card-type">Costrutto Arcano • Boss</p>
-          <div class="card-divider"></div>
-          <div class="danger-dots">
-            <div class="dot bright"></div>
-            <div class="dot bright"></div>
-            <div class="dot bright"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-          </div>
-          <p class="card-desc">Intelligenza primordiale che governa le leggi arcane. Freddo, implacabile, perfetto nella sua logica devastante.</p>
-          <div class="card-cta">
-            Apri la Scheda <span class="cta-arrow">→</span>
-          </div>
-        </div>
-      </a>
-
       <!-- Card 3: Azan -->
       <a class="boss-card azan-card" href="vexarath_boss.html" style="animation-delay:0.30s;">
         <div class="card-inner" style="background: linear-gradient(160deg, #1a0808 0%, #110606 50%, #0e0808 100%); border-color: #6a1a1a;">
@@ -555,6 +592,80 @@
         </div>
       </a>
 
+    </div>
+
+    <!-- SCONTRO OPZIONALE: System -->
+    <div class="side-section">
+      <div class="side-label">
+        <div class="side-label-line"></div>
+        <span class="side-label-text">Scontro Opzionale</span>
+        <div class="side-label-line"></div>
+      </div>
+
+      <a class="boss-card" href="system_boss.html">
+        <div class="card-inner">
+          <div class="glow-sweep"></div>
+          <div class="boss-sigil">
+            <div class="sigil-ring">
+              <span class="sigil-icon">⬡</span>
+            </div>
+          </div>
+          <p class="card-cr">Challenge Rating — Unknown</p>
+          <h2 class="card-title">System</h2>
+          <p class="card-type">Costrutto Arcano • Boss</p>
+          <div class="card-divider"></div>
+          <div class="danger-dots">
+            <div class="dot bright"></div>
+            <div class="dot bright"></div>
+            <div class="dot bright"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <p class="card-desc">Intelligenza primordiale che governa le leggi arcane. Freddo, implacabile, perfetto nella sua logica devastante.</p>
+          <div class="card-cta">
+            Apri la Scheda <span class="cta-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <p class="side-note">⬥ Non fa parte della storia principale ⬥</p>
+    </div>
+
+    <!-- EXTRA: Trent Kirsi -->
+    <div class="side-section" style="margin-top:36px;">
+      <div class="side-label">
+        <div class="side-label-line" style="background: linear-gradient(to right, transparent, rgba(138,156,212,0.2), transparent);"></div>
+        <span class="side-label-text" style="color: rgba(138,156,212,0.35); letter-spacing:0.3em;">Extra</span>
+        <div class="side-label-line" style="background: linear-gradient(to right, transparent, rgba(138,156,212,0.2), transparent);"></div>
+      </div>
+
+      <a class="boss-card trent-card" href="trent_kirsi.html">
+        <div class="card-inner" style="background: linear-gradient(160deg, #0a0d1a 0%, #0d1018 50%, #090c14 100%); border-color: #2a3050;">
+          <div class="glow-sweep" style="background: linear-gradient(135deg, rgba(74,90,154,0.1) 0%, transparent 60%);"></div>
+          <div class="boss-sigil">
+            <div class="sigil-ring" style="border-color: #2a3050; background: radial-gradient(circle, rgba(74,90,154,0.08) 0%, transparent 70%);">
+              <span class="sigil-icon" style="filter: drop-shadow(0 0 8px rgba(138,156,212,0.5));">◈</span>
+            </div>
+          </div>
+          <p class="card-cr">Challenge Rating — 7</p>
+          <h2 class="card-title" style="color: #8b9cd4; text-shadow: 0 0 20px rgba(138,156,212,0.4);">Trent Kirsi</h2>
+          <p class="card-type">Assassino Mutaforma • Boss del Sogno</p>
+          <div class="card-divider" style="background: linear-gradient(to right, transparent, #2a3050, transparent);"></div>
+          <div class="danger-dots">
+            <div class="dot" style="background:#4a5a9a;"></div>
+            <div class="dot" style="background:#4a5a9a;"></div>
+            <div class="dot" style="background:#8b9cd4; box-shadow:0 0 6px #8b9cd4;"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <p class="card-desc" style="color: #7a8098;">Prende le sembianze di chi ami. Lotta nel tuo sogno, conosce i tuoi ricordi — e sa esattamente come spezzarti.</p>
+          <div class="card-cta" style="color: #4a5a9a;">
+            Apri la Scheda <span class="cta-arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <p class="side-note" style="color: rgba(138,156,212,0.25);">⬥ Fuori dalla narrativa principale ⬥</p>
     </div>
 
     <div class="tools-section">

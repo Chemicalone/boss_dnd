@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trent Kirsi — Boss del Sogno Infranto</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0f;
+    --bg2: #0d1018;
+    --panel: #10141e;
+    --panel2: #141824;
+    --border: #2a3050;
+    --border-glow: #4a5a9a;
+    --phase1: #8b9cd4;
+    --phase2: #c44a6b;
+    --phase2-dark: #7a1f3d;
+    --gold: #c8a84b;
+    --gold-light: #e8c870;
+    --text: #d4d8e8;
+    --text-dim: #7a8098;
+    --text-bright: #eef0f8;
+    --poison: #5aa85a;
+    --shadow: #1a0a1a;
+    --crack: #c44a6b;
+    --legendary: #9b6fd4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(74,90,154,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(196,74,107,0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Crack lines overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(135deg, transparent 48%, rgba(196,74,107,0.06) 49%, rgba(196,74,107,0.06) 51%, transparent 52%),
+      linear-gradient(45deg, transparent 70%, rgba(196,74,107,0.04) 71%, rgba(196,74,107,0.04) 72%, transparent 73%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sheet {
+    max-width: 820px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 2.5rem 2rem 1.8rem;
+    background: linear-gradient(180deg, #0a0d16 0%, var(--panel) 100%);
+    border: 1px solid var(--border-glow);
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 10%; right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--phase2), var(--gold), transparent);
+    animation: shimmer 4s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .header-sigil {
+    font-size: 2.4rem;
+    letter-spacing: 0.3rem;
+    color: var(--gold);
+    opacity: 0.4;
+    margin-bottom: 0.5rem;
+    animation: pulse-sigil 6s ease-in-out infinite;
+  }
+
+  @keyframes pulse-sigil {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.03); }
+  }
+
+  .boss-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 0.1rem;
+    text-shadow: 0 0 40px rgba(196,74,107,0.4), 0 0 80px rgba(74,90,154,0.3);
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+  }
+
+  .boss-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.25rem;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 0.3rem;
+  }
+
+  .boss-cr {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--phase2);
+    letter-spacing: 0.2rem;
+    border: 1px solid rgba(196,74,107,0.3);
+    padding: 0.15rem 0.9rem;
+    margin-top: 0.4rem;
+  }
+
+  /* ── PHASE TABS ── */
+  .phase-tabs {
+    display: flex;
+    border: 1px solid var(--border-glow);
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .phase-tab {
+    flex: 1;
+    padding: 0.9rem 1rem;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.15rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-tab.phase1 {
+    background: linear-gradient(180deg, #1a2040 0%, var(--panel2) 100%);
+    color: var(--phase1);
+    border-right: 1px solid var(--border);
+  }
+
+  .phase-tab.phase2 {
+    background: linear-gradient(180deg, #1a0a18 0%, var(--panel2) 100%);
+    color: var(--phase2);
+  }
+
+  .phase-tab:hover {
+    filter: brightness(1.2);
+  }
+
+  .phase-tab .tab-hp {
+    display: block;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.75rem;
+    opacity: 0.65;
+    margin-top: 0.2rem;
+    letter-spacing: 0.05rem;
+  }
+
+  /* ── VITALS STRIP ── */
+  .vitals-strip {
+    display: flex;
+    gap: 0;
+    background: var(--panel);
+    border: 1px solid var(--border-glow);
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .vital {
+    flex: 1;
+    padding: 0.7rem 0.5rem;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+
+  .vital:last-child { border-right: none; }
+
+  .vital-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .vital-value {
+    font-family: 'Cinzel', serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--gold-light);
+  }
+
+  .vital-value.phase2-val {
+    color: var(--phase2);
+  }
+
+  .vital-sub {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    display: block;
+    margin-top: 0.1rem;
+    font-style: italic;
+  }
+
+  /* ── ABILITY SCORES ── */
+  .ability-grid {
+    display: flex;
+    background: var(--panel2);
+    border: 1px solid var(--border-glow);
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .ability {
+    flex: 1;
+    padding: 0.8rem 0.2rem;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+
+  .ability:last-child { border-right: none; }
+  .ability:hover { background: rgba(74,90,154,0.1); }
+
+  .ability-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12rem;
+    color: var(--text-dim);
+    display: block;
+  }
+
+  .ability-score {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    display: block;
+    line-height: 1;
+    margin: 0.2rem 0;
+  }
+
+  .ability.dex .ability-score { color: var(--phase1); }
+  .ability.cha .ability-score { color: var(--gold-light); }
+
+  .ability-mod {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--gold);
+    display: block;
+  }
+
+  /* ── SECTION PANELS ── */
+  .main-body {
+    background: var(--panel);
+    border: 1px solid var(--border-glow);
+    border-top: none;
+    padding: 1.2rem 1.4rem;
+  }
+
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 2.5rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(42,48,80,0.5);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .stat-row:last-child { border-bottom: none; }
+
+  .stat-row strong {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1rem;
+    color: var(--gold);
+    font-weight: 600;
+    min-width: 120px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .stat-row span {
+    color: var(--text);
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.08rem;
+  }
+
+  .tag.immunity { background: rgba(90,168,90,0.15); color: var(--poison); border: 1px solid rgba(90,168,90,0.3); }
+  .tag.condition { background: rgba(138,156,212,0.12); color: var(--phase1); border: 1px solid rgba(138,156,212,0.25); }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.2rem 0 0.8rem;
+  }
+
+  .section-divider .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+  }
+
+  .section-divider .label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── ABILITIES LIST ── */
+  .ability-entry {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(42,48,80,0.4);
+    font-size: 0.93rem;
+    line-height: 1.65;
+  }
+
+  .ability-entry:last-child { border-bottom: none; }
+
+  .ability-entry .ability-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06rem;
+    color: var(--text-bright);
+    font-style: italic;
+  }
+
+  .ability-entry .badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.1rem;
+    padding: 0.05rem 0.45rem;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-left: 0.3rem;
+    font-style: normal;
+  }
+
+  .badge.p1 { background: rgba(138,156,212,0.18); color: var(--phase1); border: 1px solid rgba(138,156,212,0.3); }
+  .badge.p2 { background: rgba(196,74,107,0.18); color: var(--phase2); border: 1px solid rgba(196,74,107,0.3); }
+  .badge.limited { background: rgba(200,168,75,0.12); color: var(--gold); border: 1px solid rgba(200,168,75,0.25); }
+
+  .ability-entry p {
+    color: var(--text);
+    margin-top: 0.2rem;
+  }
+
+  .ability-entry em {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+  }
+
+  /* ── ACTIONS ── */
+  .action-entry {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(42,48,80,0.4);
+    font-size: 0.93rem;
+    line-height: 1.65;
+  }
+
+  .action-entry:last-child { border-bottom: none; }
+
+  .action-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06rem;
+    color: var(--gold-light);
+    font-style: italic;
+  }
+
+  .action-hit {
+    display: inline-block;
+    background: rgba(196,74,107,0.12);
+    border: 1px solid rgba(196,74,107,0.25);
+    color: var(--phase2);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.08rem;
+    padding: 0.05rem 0.45rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    font-style: normal;
+  }
+
+  .action-recharge {
+    display: inline-block;
+    background: rgba(155,111,212,0.12);
+    border: 1px solid rgba(155,111,212,0.3);
+    color: var(--legendary);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.08rem;
+    padding: 0.05rem 0.45rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    font-style: normal;
+  }
+
+  .action-entry p { color: var(--text); margin-top: 0.2rem; }
+
+  .dmg { color: var(--phase2); font-weight: 600; }
+  .poison-dmg { color: var(--poison); font-weight: 600; }
+  .force-dmg { color: var(--legendary); font-weight: 600; }
+  .dc { color: var(--gold); font-weight: 600; }
+
+  /* ── PHASE TRANSITION BOX ── */
+  .phase-transition {
+    margin: 1.4rem 0;
+    padding: 1.1rem 1.3rem;
+    background: linear-gradient(135deg, rgba(196,74,107,0.08) 0%, rgba(122,31,61,0.12) 100%);
+    border: 1px solid rgba(196,74,107,0.4);
+    border-left: 3px solid var(--phase2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-transition::before {
+    content: '⬡ SOGNO INFRANTO ⬡';
+    position: absolute;
+    top: 0.5rem; right: 0.8rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.2rem;
+    color: var(--phase2);
+    opacity: 0.5;
+  }
+
+  .phase-transition .transition-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.12rem;
+    color: var(--phase2);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .phase-transition p {
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .phase-transition .effects-list {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .effect-chip {
+    background: rgba(196,74,107,0.12);
+    border: 1px solid rgba(196,74,107,0.25);
+    color: var(--text);
+    font-size: 0.78rem;
+    padding: 0.2rem 0.6rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.05rem;
+  }
+
+  /* ── LEGENDARY ACTIONS ── */
+  .legendary-box {
+    margin-top: 0.5rem;
+    padding: 1rem 1.2rem;
+    background: rgba(155,111,212,0.06);
+    border: 1px solid rgba(155,111,212,0.25);
+    border-left: 3px solid var(--legendary);
+  }
+
+  .legendary-header {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18rem;
+    color: var(--legendary);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .legendary-action {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(155,111,212,0.15);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .legendary-action:last-child { border-bottom: none; }
+
+  .legendary-action .leg-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.76rem;
+    color: var(--legendary);
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .cost-badge {
+    display: inline-block;
+    background: rgba(155,111,212,0.18);
+    border: 1px solid rgba(155,111,212,0.35);
+    color: var(--legendary);
+    font-size: 0.62rem;
+    font-family: 'Cinzel', serif;
+    padding: 0.05rem 0.4rem;
+    letter-spacing: 0.08rem;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+    font-style: normal;
+  }
+
+  /* ── DM NOTE ── */
+  .dm-note {
+    margin-top: 1.5rem;
+    padding: 1.1rem 1.3rem;
+    background: rgba(10,13,22,0.7);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--gold);
+    position: relative;
+  }
+
+  .dm-note::before {
+    content: 'NOTA PER IL DM';
+    position: absolute;
+    top: -0.55rem; left: 1rem;
+    background: var(--bg);
+    padding: 0 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2rem;
+    color: var(--gold);
+  }
+
+  .dm-note p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .dm-note p strong {
+    color: var(--gold);
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.06rem;
+  }
+
+  /* ── HP BAR INTERATTIVA ── */
+  .hp-bar-wrap {
+    padding: 0.9rem 1.4rem 1rem;
+    background: var(--panel2);
+    border: 1px solid var(--border-glow);
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .hp-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.55rem;
+    flex-wrap: wrap;
+  }
+
+  .hp-display {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1;
+    min-width: 3.5rem;
+    text-align: center;
+  }
+
+  .hp-display.in-phase2 { color: var(--phase2); }
+  .hp-display.dead { color: #555; text-decoration: line-through; }
+
+  .hp-sep {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1rem;
+  }
+
+  .hp-input {
+    background: rgba(10,13,22,0.8);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    padding: 0.22rem 0.5rem;
+    width: 72px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+  }
+
+  .hp-input::-webkit-outer-spin-button,
+  .hp-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .hp-input:focus { border-color: var(--border-glow); }
+
+  .hp-btn-group {
+    display: flex;
+    gap: 0.35rem;
+    margin-left: auto;
+  }
+
+  .hp-btn {
+    background: rgba(42,48,80,0.5);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.08rem;
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+
+  .hp-btn:hover { background: rgba(74,90,154,0.25); color: var(--text-bright); border-color: var(--border-glow); }
+  .hp-btn.heal { border-color: rgba(90,168,90,0.4); }
+  .hp-btn.heal:hover { background: rgba(90,168,90,0.2); color: var(--poison); }
+  .hp-btn.dmg { border-color: rgba(196,74,107,0.4); }
+  .hp-btn.dmg:hover { background: rgba(196,74,107,0.2); color: var(--phase2); }
+  .hp-btn.reset-btn { border-color: rgba(200,168,75,0.4); }
+  .hp-btn.reset-btn:hover { background: rgba(200,168,75,0.15); color: var(--gold); }
+
+  .hp-delta-input {
+    background: rgba(10,13,22,0.8);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    padding: 0.22rem 0.45rem;
+    width: 58px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+  }
+
+  .hp-delta-input::-webkit-outer-spin-button,
+  .hp-delta-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .hp-delta-input:focus { border-color: var(--border-glow); }
+
+  .hp-bar-track {
+    height: 14px;
+    background: rgba(20,24,36,0.9);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 1px;
+  }
+
+  .hp-bar-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 100%;
+    background: linear-gradient(90deg, var(--phase1), #6a7eb4);
+    transition: width 0.35s ease, background 0.35s ease;
+  }
+
+  .hp-bar-fill.phase2-fill {
+    background: linear-gradient(90deg, #8a2040, var(--phase2));
+  }
+
+  .hp-bar-fill.dead-fill {
+    background: rgba(60,60,70,0.6);
+  }
+
+  .hp-midpoint {
+    position: absolute;
+    top: -2px; bottom: -2px;
+    width: 2px;
+    background: var(--gold);
+    box-shadow: 0 0 6px var(--gold);
+    transform: translateX(-50%);
+    pointer-events: none;
+    transition: left 0.35s ease;
+  }
+
+  .hp-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+  }
+
+  .hp-phase-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.12rem;
+    margin-top: 0.4rem;
+    text-align: center;
+  }
+
+  .hp-phase-label.phase1-active { color: var(--phase1); }
+  .hp-phase-label.phase2-active { color: var(--phase2); animation: phase2-pulse 2s ease-in-out infinite; }
+  .hp-phase-label.dead-label { color: #555; }
+
+  @keyframes phase2-pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; text-shadow: 0 0 8px rgba(196,74,107,0.6); }
+  }
+
+  .hp-max-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hp-max-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .hp-max-input {
+    background: rgba(10,13,22,0.8);
+    border: 1px solid rgba(200,168,75,0.3);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    padding: 0.18rem 0.5rem;
+    width: 72px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+  }
+
+  .hp-max-input::-webkit-outer-spin-button,
+  .hp-max-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .hp-max-input:focus { border-color: var(--gold); }
+
+  @keyframes bar-glow1 {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: inset 0 0 8px rgba(138,156,212,0.4); }
+  }
+
+  /* ── FOOTER ── */
+  .sheet-footer {
+    background: var(--panel2);
+    border: 1px solid var(--border-glow);
+    border-top: 1px solid rgba(200,168,75,0.15);
+    padding: 0.5rem 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.15rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .boss-name { font-size: 1.8rem; }
+    .ability-score { font-size: 1.1rem; }
+    .vitals-strip { flex-wrap: wrap; }
+    .vital { min-width: 33%; }
+    .main-body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-sigil">⁂ ✦ ⁂</div>
+    <div class="boss-name">Trent Kirsi</div>
+    <div class="boss-subtitle">Assassino Mutaforma Nobile &nbsp;·&nbsp; Boss del Sogno Infranto</div>
+    <div class="boss-cr">GS 7</div>
+  </div>
+
+  <!-- PHASE TABS -->
+  <div class="phase-tabs">
+    <div class="phase-tab phase1">
+      ◈ &nbsp;FASE 1 — IL PADRE NEL SOGNO
+      <span class="tab-hp">130 → 65 PF</span>
+    </div>
+    <div class="phase-tab phase2">
+      ◈ &nbsp;FASE 2 — IL VERO VOLTO
+      <span class="tab-hp">65 → 0 PF</span>
+    </div>
+  </div>
+
+  <!-- HP BAR INTERATTIVA -->
+  <div class="hp-bar-wrap">
+
+    <!-- Riga HP Max personalizzabile -->
+    <div class="hp-max-row">
+      <span class="hp-max-label">PF Max:</span>
+      <input type="number" id="hpMaxInput" class="hp-max-input" value="130" min="1" title="Modifica i PF massimi">
+      <span class="hp-max-label" style="margin-left:0.3rem">· Soglia fase:</span>
+      <span id="phaseThresholdDisplay" style="font-family:'Cinzel',serif;font-size:0.75rem;color:var(--gold);letter-spacing:0.1rem;">65 PF (50%)</span>
+    </div>
+
+    <!-- Riga HP correnti + bottoni -->
+    <div class="hp-controls-row">
+      <div id="hpDisplay" class="hp-display">130</div>
+      <span class="hp-sep">/</span>
+      <div id="hpMaxDisplay" class="hp-display" style="font-size:0.9rem;color:var(--text-dim);">130</div>
+      <span class="hp-sep">PF</span>
+      <div class="hp-btn-group">
+        <input type="number" id="deltaInput" class="hp-delta-input" value="10" min="1" title="Quantità danno/cura">
+        <button class="hp-btn dmg" onclick="applyDelta(-1)" title="Applica danno">− Danno</button>
+        <button class="hp-btn heal" onclick="applyDelta(1)" title="Applica cura">+ Cura</button>
+        <button class="hp-btn reset-btn" onclick="resetHP()" title="Ripristina PF al massimo">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- Barra visiva -->
+    <div class="hp-bar-track" id="hpBarTrack" title="Clicca per impostare i PF">
+      <div class="hp-bar-fill" id="hpBarFill"></div>
+      <div class="hp-midpoint" id="hpMidpoint"></div>
+    </div>
+
+    <!-- Etichette -->
+    <div class="hp-bar-labels">
+      <span id="labelMax">130 PF</span>
+      <span id="labelMid" style="color:var(--gold);">⬥ SOGLIA FASE: 65 PF ⬥</span>
+      <span>0</span>
+    </div>
+
+    <!-- Stato fase -->
+    <div id="phaseLabel" class="hp-phase-label phase1-active">◈ FASE 1 — IL PADRE NEL SOGNO</div>
+
+  </div>
+
+  <script>
+    (function() {
+      let hpMax = 130;
+      let hpCurrent = 130;
+
+      const hpMaxInput     = document.getElementById('hpMaxInput');
+      const deltaInput     = document.getElementById('deltaInput');
+      const hpDisplay      = document.getElementById('hpDisplay');
+      const hpMaxDisplay   = document.getElementById('hpMaxDisplay');
+      const hpBarFill      = document.getElementById('hpBarFill');
+      const hpMidpoint     = document.getElementById('hpMidpoint');
+      const phaseLabel     = document.getElementById('phaseLabel');
+      const labelMax       = document.getElementById('labelMax');
+      const labelMid       = document.getElementById('labelMid');
+      const phaseThreshold = document.getElementById('phaseThresholdDisplay');
+      const hpBarTrack     = document.getElementById('hpBarTrack');
+
+      // Tabs fase
+      const tab1 = document.querySelector('.phase-tab.phase1 .tab-hp');
+      const tab2 = document.querySelector('.phase-tab.phase2 .tab-hp');
+
+      function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+      function render() {
+        const threshold = Math.floor(hpMax / 2);
+        const pct = hpMax > 0 ? clamp(hpCurrent / hpMax, 0, 1) : 0;
+        const thresholdPct = 50; // sempre 50%
+
+        // Numeri
+        hpDisplay.textContent = hpCurrent;
+        hpMaxDisplay.textContent = hpMax;
+        labelMax.textContent = hpMax + ' PF';
+        labelMid.textContent = '⬥ SOGLIA FASE: ' + threshold + ' PF ⬥';
+        phaseThreshold.textContent = threshold + ' PF (50%)';
+
+        // Barra fill
+        hpBarFill.style.width = (pct * 100) + '%';
+
+        // Midpoint dorato sempre al 50%
+        hpMidpoint.style.left = '50%';
+
+        // Fase e colore
+        hpBarFill.classList.remove('phase2-fill', 'dead-fill');
+        hpDisplay.classList.remove('in-phase2', 'dead');
+        phaseLabel.classList.remove('phase1-active', 'phase2-active', 'dead-label');
+
+        if (hpCurrent <= 0) {
+          hpBarFill.classList.add('dead-fill');
+          hpDisplay.classList.add('dead');
+          phaseLabel.classList.add('dead-label');
+          phaseLabel.textContent = '✦ SCONFITTO ✦';
+        } else if (hpCurrent <= threshold) {
+          hpBarFill.classList.add('phase2-fill');
+          hpDisplay.classList.add('in-phase2');
+          phaseLabel.classList.add('phase2-active');
+          phaseLabel.textContent = '◈ FASE 2 — IL VERO VOLTO';
+        } else {
+          phaseLabel.classList.add('phase1-active');
+          phaseLabel.textContent = '◈ FASE 1 — IL PADRE NEL SOGNO';
+        }
+
+        // Aggiorna tab
+        if (tab1) tab1.textContent = hpMax + ' → ' + threshold + ' PF';
+        if (tab2) tab2.textContent = threshold + ' → 0 PF';
+      }
+
+      window.applyDelta = function(sign) {
+        const delta = parseInt(deltaInput.value) || 0;
+        hpCurrent = clamp(hpCurrent + sign * delta, 0, hpMax);
+        render();
+      };
+
+      window.resetHP = function() {
+        hpCurrent = hpMax;
+        render();
+      };
+
+      // HP max cambia → ri-calcola tutto
+      hpMaxInput.addEventListener('change', function() {
+        const v = parseInt(this.value);
+        if (!isNaN(v) && v >= 1) {
+          hpMax = v;
+          hpCurrent = clamp(hpCurrent, 0, hpMax);
+          render();
+        }
+      });
+
+      // Click sulla barra per impostare HP
+      hpBarTrack.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const ratio = clamp((e.clientX - rect.left) / rect.width, 0, 1);
+        hpCurrent = Math.round(ratio * hpMax);
+        render();
+      });
+
+      // Drag sulla barra
+      let dragging = false;
+      hpBarTrack.addEventListener('mousedown', function(e) {
+        dragging = true;
+        const rect = this.getBoundingClientRect();
+        const ratio = clamp((e.clientX - rect.left) / rect.width, 0, 1);
+        hpCurrent = Math.round(ratio * hpMax);
+        render();
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!dragging) return;
+        const rect = hpBarTrack.getBoundingClientRect();
+        const ratio = clamp((e.clientX - rect.left) / rect.width, 0, 1);
+        hpCurrent = Math.round(ratio * hpMax);
+        render();
+      });
+      document.addEventListener('mouseup', function() { dragging = false; });
+
+      // Touch support
+      hpBarTrack.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        const rect = this.getBoundingClientRect();
+        const ratio = clamp((e.touches[0].clientX - rect.left) / rect.width, 0, 1);
+        hpCurrent = Math.round(ratio * hpMax);
+        render();
+      }, { passive: false });
+
+      // Enter su deltaInput applica danno
+      deltaInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') applyDelta(-1);
+      });
+
+      render();
+    })();
+  </script>
+
+  <!-- VITALS -->
+  <div class="vitals-strip">
+    <div class="vital">
+      <span class="vital-label">CA</span>
+      <span class="vital-value">14 <span style="color:var(--text-dim);font-size:0.7rem">F1</span></span>
+      <span class="vital-sub">16 in Fase 2</span>
+    </div>
+    <div class="vital">
+      <span class="vital-label">Velocità</span>
+      <span class="vital-value">9 m</span>
+      <span class="vital-sub">+3 m oscurità (F2)</span>
+    </div>
+    <div class="vital">
+      <span class="vital-label">Iniziativa</span>
+      <span class="vital-value">+7</span>
+    </div>
+    <div class="vital">
+      <span class="vital-label">Scurovisione</span>
+      <span class="vital-value">18 m</span>
+    </div>
+    <div class="vital">
+      <span class="vital-label">Perc. Passiva</span>
+      <span class="vital-value">14</span>
+    </div>
+    <div class="vital">
+      <span class="vital-label">Azioni Leg.</span>
+      <span class="vital-value phase2-val">2/round</span>
+      <span class="vital-sub">fine turno avv.</span>
+    </div>
+  </div>
+
+  <!-- ABILITY SCORES -->
+  <div class="ability-grid">
+    <div class="ability">
+      <span class="ability-name">FOR</span>
+      <span class="ability-score">12</span>
+      <span class="ability-mod">+1</span>
+    </div>
+    <div class="ability dex">
+      <span class="ability-name">DES</span>
+      <span class="ability-score">20</span>
+      <span class="ability-mod">+5</span>
+    </div>
+    <div class="ability">
+      <span class="ability-name">COS</span>
+      <span class="ability-score">16</span>
+      <span class="ability-mod">+3</span>
+    </div>
+    <div class="ability">
+      <span class="ability-name">INT</span>
+      <span class="ability-score">14</span>
+      <span class="ability-mod">+2</span>
+    </div>
+    <div class="ability">
+      <span class="ability-name">SAG</span>
+      <span class="ability-score">12</span>
+      <span class="ability-mod">+1</span>
+    </div>
+    <div class="ability cha">
+      <span class="ability-name">CAR</span>
+      <span class="ability-score">18</span>
+      <span class="ability-mod">+4</span>
+    </div>
+  </div>
+
+  <!-- MAIN BODY -->
+  <div class="main-body">
+
+    <!-- Stats block -->
+    <div class="stat-row">
+      <strong>Tiri Salvezza</strong>
+      <span>Des +8, Car +7</span>
+    </div>
+    <div class="stat-row">
+      <strong>Abilità</strong>
+      <span>Furtività +8 · Inganno +7 · Percezione +4 · Acrobazia +8</span>
+    </div>
+    <div class="stat-row">
+      <strong>Immunità danni</strong>
+      <span><span class="tag immunity">Veleno</span></span>
+    </div>
+    <div class="stat-row">
+      <strong>Immunità condizioni</strong>
+      <span><span class="tag condition">Affascinato (nel sogno)</span></span>
+    </div>
+
+    <!-- Special Abilities -->
+    <div class="section-divider">
+      <div class="line"></div>
+      <div class="label">Abilità Speciali</div>
+      <div class="line"></div>
+    </div>
+
+    <div class="ability-entry">
+      <div class="ability-title">Forma del Padre <span class="badge p1">Solo Fase 1</span></div>
+      <p>All'inizio del combattimento Trent appare identico al padre del giocatore. Tutti i tiri per colpire contro di lui hanno <strong>svantaggio</strong> finché non effettua lui stesso il primo attacco.</p>
+    </div>
+
+    <div class="ability-entry">
+      <div class="ability-title">Velo del Sogno <span class="badge p1">Solo Fase 1</span> <span class="badge limited">1/combattimento</span></div>
+      <p>All'inizio del suo turno, Trent può imporre al giocatore un <span class="dc">TS Saggezza CD 14</span>. In caso di fallimento, il giocatore spende la sua azione a fissare un miraggio del passato e non può fare altro.</p>
+    </div>
+
+    <div class="ability-entry">
+      <div class="ability-title">Cambiaforma</div>
+      <p>Come <em>azione bonus</em>, Trent assume le sembianze di qualsiasi creatura Media che abbia osservato. Le statistiche restano invariate.</p>
+    </div>
+
+    <div class="ability-entry">
+      <div class="ability-title">Fuga nelle Ombre</div>
+      <p>Trent può eseguire <strong>Disimpegnarsi</strong> o <strong>Nascondersi</strong> come azione bonus ogni turno.</p>
+    </div>
+
+    <div class="ability-entry">
+      <div class="ability-title">Attacco Furtivo <span style="color:var(--phase2);font-weight:600">(3d6)</span></div>
+      <p>Infligge <span class="dmg">+3d6 danni extra</span> al bersaglio se ha vantaggio o un alleato adiacente. Si applica una sola volta per turno.</p>
+    </div>
+
+    <!-- Phase Transition -->
+    <div class="phase-transition">
+      <div class="transition-title">⬡ &nbsp;Sogno Infranto — si attiva a 65 PF o meno</div>
+      <p>Il sogno si crepola: le pareti si distorcono, i colori svaniscono, frammenti di realtà trapassano la scena. Trent abbandona la Forma del Padre e il Velo del Sogno.</p>
+      <div class="effects-list">
+        <div class="effect-chip">CA 14 → 16</div>
+        <div class="effect-chip">Velocità +3 m in oscurità</div>
+        <div class="effect-chip">Assalto d'Ombra: Ricarica 5–6</div>
+        <div class="effect-chip">Passo nell'Ombra sbloccato</div>
+        <div class="effect-chip">Scivolata dell'Ombra sbloccata</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="section-divider">
+      <div class="line"></div>
+      <div class="label">Azioni</div>
+      <div class="line"></div>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Doppio Attacco</div>
+      <p>Trent effettua due attacchi con <em>Lama dell'Ombra</em> per turno.</p>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Lama dell'Ombra <span class="action-hit">+8 al colpo · portata 1,5 m</span></div>
+      <p><span class="dmg">1d8+5 danni perforanti</span> + <span class="poison-dmg">2d6 danni da veleno</span>. Il bersaglio effettua un <span class="dc">TS Costituzione CD 15</span> oppure è <strong>Avvelenato</strong> fino alla fine del prossimo turno di Trent.</p>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Assalto d'Ombra
+        <span class="action-recharge">Ricarica 6 · F2: Ricarica 5–6</span>
+      </div>
+      <p>Un'ondata di oscurità schiaccia il bersaglio entro 18 m. Il bersaglio subisce <span class="force-dmg">4d12+7 danni da forza</span> (media ~33). <span class="dc">TS Destrezza CD 17</span> per la metà. In caso di fallimento il bersaglio è anche <strong>Rallentato</strong> (velocità dimezzata) fino alla fine del suo prossimo turno.</p>
+    </div>
+
+    <!-- Bonus Actions -->
+    <div class="section-divider">
+      <div class="line"></div>
+      <div class="label">Azioni Bonus</div>
+      <div class="line"></div>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Fuga nelle Ombre</div>
+      <p>Disimpegno o Nascondersi.</p>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Cambiaforma</div>
+      <p>Assume nuove sembianze come azione bonus.</p>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Passo nell'Ombra <span class="badge p2">Solo Fase 2</span></div>
+      <p>Si teletrasporta fino a 9 m in una zona di luce fioca o oscurità che riesce a vedere.</p>
+    </div>
+
+    <!-- Reactions -->
+    <div class="section-divider">
+      <div class="line"></div>
+      <div class="label">Reazioni</div>
+      <div class="line"></div>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Riflesso del Sogno <span class="badge p1">Solo Fase 1</span> <span class="badge limited">1/combattimento</span></div>
+      <p>Quando viene colpito, Trent aggiunge <span class="dc">+4 alla sua CA</span> contro quell'attacco — usato dopo il tiro, potrebbe far mancare il colpo.</p>
+    </div>
+
+    <div class="action-entry">
+      <div class="action-title">Scivolata dell'Ombra <span class="badge p2">Solo Fase 2</span></div>
+      <p>Quando viene colpito, si sposta fino a 3 m senza provocare attacchi di opportunità.</p>
+    </div>
+
+    <!-- Legendary Actions -->
+    <div class="section-divider">
+      <div class="line"></div>
+      <div class="label">Azioni Leggendarie</div>
+      <div class="line"></div>
+    </div>
+
+    <div class="legendary-box">
+      <div class="legendary-header">2 azioni per round · alla fine del turno di un avversario</div>
+
+      <div class="legendary-action">
+        <span class="leg-title">Scivolata</span> <span class="cost-badge">1 punto</span>
+        <p style="color:var(--text);font-size:0.92rem;line-height:1.6;margin-top:0.15rem">Si muove fino alla metà della velocità.</p>
+      </div>
+
+      <div class="legendary-action">
+        <span class="leg-title">Colpo dell'Ombra</span> <span class="cost-badge">1 punto</span>
+        <p style="color:var(--text);font-size:0.92rem;line-height:1.6;margin-top:0.15rem">Un attacco con Lama dell'Ombra.</p>
+      </div>
+
+      <div class="legendary-action">
+        <span class="leg-title">Velo Infranto</span> <span class="cost-badge">2 punti</span> <span class="badge p2" style="margin-left:0.2rem">Solo Fase 2</span>
+        <p style="color:var(--text);font-size:0.92rem;line-height:1.6;margin-top:0.15rem">Il sogno frammenta ulteriormente. Tutte le prove di concentrazione del giocatore fino all'inizio del prossimo turno di Trent hanno svantaggio.</p>
+      </div>
+    </div>
+
+    <!-- DM Note -->
+    <div class="dm-note">
+      <p>Questo scontro funziona meglio se nella <strong>Fase 1</strong> Trent parla normalmente, usa la voce del padre, fa riferimenti a ricordi reali. Solo alla <strong>transizione di fase</strong> svela che sa esattamente chi è il giocatore e cosa ha perso. <strong>L'obiettivo non è ucciderlo — è spezzarlo.</strong></p>
+    </div>
+
+  </div><!-- end main-body -->
+
+  <!-- FOOTER -->
+  <div class="sheet-footer">
+    <span class="footer-tag">SOGNO INFRANTO · CR 7</span>
+    <span class="footer-tag">TRENT KIRSI</span>
+    <span class="footer-tag">ASSASSINO MUTAFORMA NOBILE</span>
+  </div>
+
+</div><!-- end sheet -->
+</body>
+</html>
