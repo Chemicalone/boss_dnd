@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERRORE_∞ — Scheda Boss</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --void: #03000a;
+    --deep: #0a0015;
+    --glitch1: #ff003c;
+    --glitch2: #00ffe7;
+    --glitch3: #c400ff;
+    --gold: #d4a843;
+    --gold-dim: #7a5a1a;
+    --text: #e8dfc8;
+    --text-dim: #9a8f78;
+    --border: #3a2050;
+    --section-bg: rgba(20, 5, 40, 0.85);
+    --fire: #ff6a00;
+    --ice: #00c8ff;
+    --lightning: #ffe000;
+    --arcane: #c400ff;
+    --dark: #4a0080;
+    --divine: #fff5aa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--void);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 40% at 20% 20%, rgba(196,0,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 80% 80%, rgba(255,0,60,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 80% at 50% 50%, rgba(0,255,231,0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glitch-grid {
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(196,0,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196,0,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridDrift 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes gridDrift {
+    from { transform: translate(0,0); }
+    to { transform: translate(-10px, -10px); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* ====== BACK BUTTON ====== */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid rgba(196,0,255,0.2);
+    border-radius: 2px;
+    background: rgba(196,0,255,0.04);
+    transition: all 0.25s ease;
+    margin-bottom: 32px;
+  }
+  .back-btn:hover {
+    color: var(--glitch3);
+    border-color: rgba(196,0,255,0.5);
+    background: rgba(196,0,255,0.08);
+    box-shadow: 0 0 12px rgba(196,0,255,0.15);
+  }
+  .back-btn .arrow { font-size: 14px; }
+
+  /* ====== HEADER ====== */
+  .boss-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .error-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--glitch1);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    animation: flicker 4s infinite;
+  }
+
+  @keyframes flicker {
+    0%,96%,100% { opacity: 1; }
+    97% { opacity: 0.2; }
+    98% { opacity: 1; }
+    99% { opacity: 0.1; }
+  }
+
+  .boss-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    position: relative;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .boss-name::before,
+  .boss-name::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+  }
+  .boss-name::before {
+    color: var(--glitch2);
+    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    animation: glitchTop 6s infinite;
+  }
+  .boss-name::after {
+    color: var(--glitch1);
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    animation: glitchBot 6s infinite;
+  }
+
+  @keyframes glitchTop {
+    0%,89%,100% { transform: translate(0); opacity: 0; }
+    90% { transform: translate(-3px, -2px); opacity: 0.8; }
+    92% { transform: translate(3px, 0); opacity: 0.6; }
+    94% { transform: translate(0); opacity: 0; }
+  }
+  @keyframes glitchBot {
+    0%,91%,100% { transform: translate(0); opacity: 0; }
+    92% { transform: translate(3px, 2px); opacity: 0.7; }
+    94% { transform: translate(-2px, 0); opacity: 0.5; }
+    96% { transform: translate(0); opacity: 0; }
+  }
+
+  .boss-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  .boss-type-line {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--gold-dim);
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+  }
+
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--glitch3), var(--glitch1), var(--glitch2), transparent);
+    margin: 24px 0;
+    position: relative;
+    animation: dividerPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes dividerPulse {
+    0%,100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .divider-thin {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 16px 0;
+  }
+
+  /* ====== STAT BLOCK ====== */
+  .stat-block {
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+  }
+
+  .stat-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--glitch3), var(--glitch1));
+    opacity: 0.6;
+  }
+
+  /* Core stats row */
+  .core-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 12px 8px;
+    border: 1px solid rgba(58, 32, 80, 0.8);
+    border-radius: 3px;
+    background: rgba(10, 0, 21, 0.6);
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .stat-mod {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* Abilities row */
+  .abilities-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .ability-box {
+    text-align: center;
+    padding: 10px 4px;
+    border: 1px solid rgba(58, 32, 80, 0.6);
+    border-radius: 3px;
+    background: rgba(10, 0, 21, 0.5);
+  }
+
+  .ability-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    display: block;
+  }
+
+  .ability-score {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 18px;
+    color: var(--text);
+    display: block;
+    margin: 2px 0;
+  }
+
+  .ability-mod {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    color: var(--gold);
+    display: block;
+  }
+
+  /* Info rows */
+  .info-line {
+    font-size: 15px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .info-label {
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 140px;
+  }
+
+  .info-value {
+    color: var(--text);
+    flex: 1;
+  }
+
+  /* ====== SECTION TITLES ====== */
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--glitch3);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--glitch3), transparent);
+    opacity: 0.4;
+  }
+
+  /* ====== TRAIT CARDS ====== */
+  .trait {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--glitch3);
+    background: rgba(10, 0, 21, 0.4);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .trait-name {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .trait-name span {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .trait p {
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  /* ====== PHASE/POWER BLOCKS ====== */
+  .phase-block {
+    margin-bottom: 24px;
+    border: 1px solid rgba(58, 32, 80, 0.7);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .phase-header {
+    padding: 12px 20px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: default;
+  }
+
+  .phase-icon {
+    font-size: 20px;
+    width: 28px;
+    text-align: center;
+  }
+
+  .phase-body {
+    padding: 16px 20px;
+    background: rgba(5, 0, 15, 0.7);
+  }
+
+  .action {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(58, 32, 80, 0.4);
+  }
+  .action:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .action-name {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 3px;
+  }
+
+  .action-detail {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+  }
+
+  .action p {
+    font-size: 14px;
+    color: #c8bfa8;
+  }
+
+  /* Phase color themes */
+  .phase-elementi .phase-header { background: linear-gradient(135deg, rgba(255,106,0,0.25), rgba(0,200,255,0.15), rgba(255,224,0,0.15)); color: #ffb040; }
+  .phase-elementi { border-color: rgba(255,106,0,0.4); }
+  .phase-elementi .action-name { color: #ff9040; }
+
+  .phase-arcana .phase-header { background: linear-gradient(135deg, rgba(196,0,255,0.3), rgba(0,0,60,0.5)); color: var(--arcane); }
+  .phase-arcana { border-color: rgba(196,0,255,0.5); }
+  .phase-arcana .action-name { color: #d060ff; }
+
+  .phase-forza .phase-header { background: linear-gradient(135deg, rgba(255,0,60,0.3), rgba(80,0,0,0.5)); color: #ff6060; }
+  .phase-forza { border-color: rgba(255,0,60,0.5); }
+  .phase-forza .action-name { color: #ff7070; }
+
+  .phase-void .phase-header { background: linear-gradient(135deg, rgba(40,0,80,0.8), rgba(0,0,0,0.9)); color: #8040c0; }
+  .phase-void { border-color: rgba(80,0,160,0.6); }
+  .phase-void .action-name { color: #a060e0; }
+
+  .phase-creazione .phase-header { background: linear-gradient(135deg, rgba(255,245,100,0.2), rgba(255,200,0,0.15), rgba(255,255,255,0.1)); color: var(--divine); }
+  .phase-creazione { border-color: rgba(255,245,100,0.5); }
+  .phase-creazione .action-name { color: #fff0a0; }
+  .phase-creazione .phase-header::after {
+    content: ' ✦ MAGIA PROIBITA ✦';
+    font-size: 10px;
+    opacity: 0.6;
+    letter-spacing: 3px;
+    margin-left: auto;
+  }
+
+  /* ====== LEGENDARY ACTIONS ====== */
+  .legendary-block {
+    background: rgba(80, 40, 0, 0.15);
+    border: 1px solid rgba(212, 168, 67, 0.3);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  /* ====== NOTE NARRATIVE ====== */
+  .lore-box {
+    background: linear-gradient(135deg, rgba(10, 0, 30, 0.9), rgba(20, 0, 15, 0.9));
+    border: 1px solid rgba(58, 32, 80, 0.8);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    font-style: italic;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lore-box::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 16px;
+    font-size: 120px;
+    font-family: 'Cinzel Decorative', serif;
+    color: rgba(196, 0, 255, 0.08);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .lore-text {
+    font-size: 16px;
+    color: #c8bfa8;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ====== DM NOTES ====== */
+  .dm-note {
+    background: rgba(0, 30, 20, 0.6);
+    border: 1px solid rgba(0, 255, 180, 0.2);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .dm-note .section-title {
+    color: var(--glitch2);
+  }
+  .dm-note .section-title::after {
+    background: linear-gradient(90deg, var(--glitch2), transparent);
+  }
+
+  .dm-note p, .dm-note li {
+    font-size: 14px;
+    color: #a0bfb0;
+    margin-bottom: 8px;
+  }
+
+  .dm-note ul { padding-left: 20px; }
+  .dm-note li { margin-bottom: 6px; }
+
+  /* ====== SWITCH TRACKER ====== */
+  .phase-tracker {
+    background: rgba(5, 0, 20, 0.9);
+    border: 1px solid rgba(196, 0, 255, 0.3);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .phase-dots {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .phase-dot {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .phase-dot.elementi { border-color: #ff9040; background: rgba(255,106,0,0.1); }
+  .phase-dot.arcana { border-color: #c400ff; background: rgba(196,0,255,0.1); }
+  .phase-dot.forza { border-color: #ff003c; background: rgba(255,0,60,0.1); }
+  .phase-dot.void-m { border-color: #8040c0; background: rgba(80,0,160,0.15); }
+  .phase-dot.creazione { border-color: #fff5aa; background: rgba(255,245,100,0.1); animation: divineGlow 2s ease-in-out infinite; }
+
+  @keyframes divineGlow {
+    0%,100% { box-shadow: 0 0 8px rgba(255,245,100,0.3); }
+    50% { box-shadow: 0 0 20px rgba(255,245,100,0.7), 0 0 40px rgba(255,200,0,0.3); }
+  }
+
+  .phase-dot:hover { transform: scale(1.15); }
+
+  .phase-dot-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    display: block;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .phase-dot-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ====== DAMAGE TAGS ====== */
+  .dmg {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 2px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 1px;
+  }
+  .dmg-fire { background: rgba(255,106,0,0.25); color: #ff9040; border: 1px solid rgba(255,106,0,0.4); }
+  .dmg-cold { background: rgba(0,200,255,0.15); color: #60e0ff; border: 1px solid rgba(0,200,255,0.4); }
+  .dmg-lightning { background: rgba(255,224,0,0.15); color: #ffe060; border: 1px solid rgba(255,224,0,0.4); }
+  .dmg-arcane { background: rgba(196,0,255,0.2); color: #d060ff; border: 1px solid rgba(196,0,255,0.4); }
+  .dmg-necrotic { background: rgba(80,0,160,0.3); color: #a060e0; border: 1px solid rgba(80,0,160,0.5); }
+  .dmg-radiant { background: rgba(255,245,100,0.15); color: #fff080; border: 1px solid rgba(255,245,100,0.4); }
+  .dmg-bludgeon { background: rgba(255,60,60,0.2); color: #ff8080; border: 1px solid rgba(255,60,60,0.4); }
+  .dmg-psychic { background: rgba(100,0,200,0.2); color: #c080ff; border: 1px solid rgba(100,0,200,0.4); }
+  .dmg-void { background: rgba(20,0,40,0.7); color: #8040c0; border: 1px solid rgba(80,0,160,0.6); }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 600px) {
+    .abilities-grid { grid-template-columns: repeat(3, 1fr); }
+    .core-stats { grid-template-columns: repeat(2, 1fr); }
+    .info-label { min-width: 100px; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--glitch3); border-radius: 3px; }
+
+  /* Highlight */
+  strong { color: var(--gold); font-weight: 600; }
+  em { color: var(--text-dim); }
+
+</style>
+</head>
+<body>
+<div class="glitch-grid"></div>
+<div class="container">
+
+  <a class="back-btn" href="index.html"><span class="arrow">←</span> Boss Lair</a>
+
+  <!-- HEADER -->
+  <div class="boss-header">
+    <div class="error-tag">⚠ ENTITÀ NON CLASSIFICABILE — MINACCIA LIVELLO OMEGA ⚠</div>
+    <h1 class="boss-name" data-text="ERRORE_∞">ERRORE_∞</h1>
+    <div class="boss-subtitle">«La Cicatrice Vivente del Multiverso»</div>
+    <div class="boss-type-line">Aberrazione Cosmica di Taglia Grande · Caotica Malvagia (forza)</div>
+    <div class="divider"></div>
+  </div>
+
+  <!-- LORE -->
+  <div class="lore-box">
+    <p class="lore-text">
+      Non è stata creata. È <em>accaduta</em>. Una frattura nell'ordine del multiverso, 
+      dove magie incompatibili si sono scontrate per eoni fino a formare una coscienza 
+      fatta di puro dolore. In fondo a quell'abisso urlante, intrappolati per sempre, 
+      battono due cuori: quello di una ragazza e quello di un demone — né padroni né 
+      ospiti, ma prigionieri. ERRORE_∞ non ha volontà propria. Ha solo fame di esistere, 
+      e sofferenza da riversare su tutto ciò che incontra.
+    </p>
+  </div>
+
+  <!-- STAT BLOCK PRINCIPALE -->
+  <div class="stat-block">
+    <div class="core-stats">
+      <div class="stat-item">
+        <span class="stat-label">Punti Ferita</span>
+        <span class="stat-value">312</span>
+        <span class="stat-mod">(25d10 + 175)</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Classe Armatura</span>
+        <span class="stat-value">22</span>
+        <span class="stat-mod">Distorsione Realtà</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Velocità</span>
+        <span class="stat-value">40 ft</span>
+        <span class="stat-mod">Volo 40 ft (fluttuare)</span>
+      </div>
+    </div>
+
+    <div class="divider-thin"></div>
+
+    <div class="abilities-grid">
+      <div class="ability-box">
+        <span class="ability-name">FOR</span>
+        <span class="ability-score">24</span>
+        <span class="ability-mod">+7</span>
+      </div>
+      <div class="ability-box">
+        <span class="ability-name">DES</span>
+        <span class="ability-score">16</span>
+        <span class="ability-mod">+3</span>
+      </div>
+      <div class="ability-box">
+        <span class="ability-name">COS</span>
+        <span class="ability-score">24</span>
+        <span class="ability-mod">+7</span>
+      </div>
+      <div class="ability-box">
+        <span class="ability-name">INT</span>
+        <span class="ability-score">6</span>
+        <span class="ability-mod">−2</span>
+      </div>
+      <div class="ability-box">
+        <span class="ability-name">SAG</span>
+        <span class="ability-score">10</span>
+        <span class="ability-mod">+0</span>
+      </div>
+      <div class="ability-box">
+        <span class="ability-name">CAR</span>
+        <span class="ability-score">8</span>
+        <span class="ability-mod">−1</span>
+      </div>
+    </div>
+
+    <div class="divider-thin"></div>
+
+    <div class="info-line"><span class="info-label">Tiri Salvezza</span><span class="info-value">For +12, Cos +12, Sag +5</span></div>
+    <div class="info-line"><span class="info-label">Competenze</span><span class="info-value">Percezione +5, Atletica +12</span></div>
+    <div class="info-line"><span class="info-label">Resistenze</span><span class="info-value">Acido, Fulmine, Fuoco, Freddo, Tuono; Contundente/Perforante/Tagliente da armi non magiche</span></div>
+    <div class="info-line"><span class="info-label">Immunità ai Danni</span><span class="info-value">Veleno, Psichico, Necrotico, Radioso, Forza</span></div>
+    <div class="info-line"><span class="info-label">Immunità alle Condizioni</span><span class="info-value">Affascinato, Atterrito, Avvelenato, Incapacitato, Paralizzato, Pietrificato, Prono, Stordito</span></div>
+    <div class="info-line"><span class="info-label">Sensi</span><span class="info-value">Vista Cieca 60 ft, Vista nel Buio 120 ft, Senso Tremotico 60 ft, Percezione Passiva 15</span></div>
+    <div class="info-line"><span class="info-label">Linguaggi</span><span class="info-value">Nessuno (capisce tutti, non comunica)</span></div>
+    <div class="info-line"><span class="info-label">Grado di Sfida</span><span class="info-value"><strong>17 (18.000 PE)</strong></span></div>
+    <div class="info-line"><span class="info-label">Bonus di Competenza</span><span class="info-value">+5</span></div>
+    <div class="info-line"><span class="info-label">Azioni Leggendarie</span><span class="info-value">3/turno</span></div>
+    <div class="info-line"><span class="info-label">Resistenza Leggendaria</span><span class="info-value">3/giorno</span></div>
+  </div>
+
+  <!-- TRACKER FASI -->
+  <div class="phase-tracker">
+    <div class="section-title" style="justify-content:center; margin-bottom:8px;">⟳ NUCLEO ATTIVO — COMMUTATORE DI POTERE</div>
+    <p style="font-size:13px; color:var(--text-dim); font-family:'Share Tech Mono',monospace;">Usa questo tracker per ricordare quale fase è attiva. La creatura cambia fase ogni turno.</p>
+    <div class="phase-dots">
+      <div class="phase-dot-wrap">
+        <div class="phase-dot elementi">🌊</div>
+        <span class="phase-dot-label">Elementi</span>
+      </div>
+      <div class="phase-dot-wrap">
+        <div class="phase-dot arcana">✦</div>
+        <span class="phase-dot-label">Arcana</span>
+      </div>
+      <div class="phase-dot-wrap">
+        <div class="phase-dot forza">⚡</div>
+        <span class="phase-dot-label">Forza</span>
+      </div>
+      <div class="phase-dot-wrap">
+        <div class="phase-dot void-m">◈</div>
+        <span class="phase-dot-label">Void</span>
+      </div>
+      <div class="phase-dot-wrap">
+        <div class="phase-dot creazione">☀</div>
+        <span class="phase-dot-label">Creazione</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRATTI PASSIVI -->
+  <div class="stat-block">
+    <div class="section-title">⟟ Tratti Speciali</div>
+
+    <div class="trait">
+      <div class="trait-name">Corpo di Errore <span>(Passivo)</span></div>
+      <p>All'inizio di ogni suo turno, ERRORE_∞ cambia automaticamente la sua Fase Attiva passando a quella successiva nell'ordine (Elementale → Arcana → Forza → Void → Creazione → Elementale…). La creatura <strong>non ha alcun controllo</strong> su questo ciclo. Quando cambia fase, ogni creatura entro 10 ft deve superare un <strong>TS su Cos CD 18</strong> o subire <span class="dmg dmg-arcane">3d6 forza</span> dal cataclisma di energia.</p>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Aura di Sofferenza <span>(Passivo — 20 ft)</span></div>
+      <p>Ogni creatura ostile che inizia il turno entro 20 ft subisce <span class="dmg dmg-psychic">2d6 psichico</span> (nessun tiro salvezza). I suoni nell'area vengono sostituiti da un urlo silenzioso percepito solo nella mente.</p>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Distorsione della Realtà <span>(Passivo — CA)</span></div>
+      <p>Gli attacchi con tiro di dado naturale ≤ 5 mancano automaticamente, anche se supererebbero la CA: il multiverso stesso si rifiuta di obbedire. La CA di 22 non include armatura — è pura distorsione spaziale.</p>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Le Due Anime <span>(Passivo)</span></div>
+      <p>Quando ERRORE_∞ scende a 0 PF per la prima volta, non muore. La ragazza e il demone si scontrano internamente: la creatura recupera <strong>100 PF</strong>, diventa <em>Stordita</em> fino alla fine del suo prossimo turno, e il ciclo delle fasi si azzera ricominciando dalla fase Elementale. Può usare questa abilità <strong>una volta sola</strong>.</p>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Magia Indomabile <span>(Passivo)</span></div>
+      <p>Le incantesimi di controllo (Domina Persona, Incanta Persone, ecc.) falliscono automaticamente contro ERRORE_∞. Essa non ha mente che si possa dominare — solo dolore.</p>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Frammento di Antimateria <span>(Passivo)</span></div>
+      <p>Ogni volta che ERRORE_∞ subisce guarigione da un effetto magico, subisce invece danno pari alla metà della guarigione come <span class="dmg dmg-void">danno Void</span> (non tipizzato, ignora immunità).</p>
+    </div>
+  </div>
+
+  <!-- AZIONI STANDARD -->
+  <div class="stat-block">
+    <div class="section-title">⚔ Azioni (Turno Standard)</div>
+
+    <div class="trait">
+      <div class="trait-name">Attacco Multiplo</div>
+      <p>Effettua <strong>due attacchi</strong> in totale scegliendo tra Fendente del Glitch e Schianto di Realtà. Se usa la Fase Creazione, effettua <strong>un solo</strong> attacco ma può usare un'Abilità di Fase come azione bonus.</p>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Fendente del Glitch <span>(Mischia)</span></div>
+      <p><em>Attacco con arma da mischia:</em> +12 al tiro per colpire, portata 10 ft, un bersaglio.<br>
+      <em>Al colpo:</em> <span class="dmg dmg-bludgeon">3d8+7 contundente</span> + <span class="dmg dmg-arcane">2d6 forza</span> del tipo della fase attiva.</p>
+    </div>
+
+    <div class="trait">
+      <div class="trait-name">Schianto di Realtà <span>(Mischia, portata 10 ft)</span></div>
+      <p><em>Attacco con arma da mischia:</em> +12 al tiro per colpire, un bersaglio.<br>
+      <em>Al colpo:</em> <span class="dmg dmg-bludgeon">4d6+7 contundente</span>. Il bersaglio deve superare un <strong>TS su For CD 20</strong> o essere <em>Spinto</em> di 15 ft e cadere <em>Prono</em>.</p>
+    </div>
+  </div>
+
+  <!-- FASI -->
+  <div class="stat-block">
+    <div class="section-title">☿ Abilità di Fase — Azione (usabile una volta per turno)</div>
+    <p style="font-size:14px; color:var(--text-dim); margin-bottom:20px; font-style:italic;">Ogni turno ERRORE_∞ può usare <strong>una</strong> delle seguenti abilità, determinata dalla sua Fase Attiva corrente.</p>
+
+    <!-- FASE 1: ELEMENTI -->
+    <div class="phase-block phase-elementi">
+      <div class="phase-header">
+        <span class="phase-icon">🌊</span>
+        FASE I — MAGIA ELEMENTALE
+      </div>
+      <div class="phase-body">
+        <div class="action">
+          <div class="action-name">Tempesta del Multiverso</div>
+          <div class="action-detail">Abilità — Area 30 ft (cono) — TS Destrezza CD 18 — Ricarica 5–6</div>
+          <p>Espelle una raffica caotica di fuoco, ghiaccio e fulmine estratti da universi paralleli. <em>TS Destrezza CD 18</em>: fallito = <span class="dmg dmg-fire">4d8 fuoco</span> + <span class="dmg dmg-cold">4d8 freddo</span> + <span class="dmg dmg-lightning">4d8 fulmine</span>; superato = metà. Il tipo dominante (determinato a caso con 1d3 al momento del lancio) lascia un effetto persistente: fuoco → bersaglio In Fiamme (1d6/turno); ghiaccio → Velocità dimezzata; fulmine → Stordito fino a inizio turno successivo.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Infusione Elementale</div>
+          <div class="action-detail">Abilità — Passivo di fase</div>
+          <p>Durante questa fase, tutti i danni da contatto di ERRORE_∞ ottengono un d6 bonus scelto casualmente tra <span class="dmg dmg-fire">fuoco</span>, <span class="dmg dmg-cold">freddo</span>, <span class="dmg dmg-lightning">fulmine</span> o <span class="dmg dmg-arcane">acido</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2: ARCANA -->
+    <div class="phase-block phase-arcana">
+      <div class="phase-header">
+        <span class="phase-icon">✦</span>
+        FASE II — MAGIA ARCANA PURA
+      </div>
+      <div class="phase-body">
+        <div class="action">
+          <div class="action-name">Raggio di Magia Concentrata</div>
+          <div class="action-detail">Abilità — Attacco Magico +10 — Portata 120 ft — Bersaglio singolo</div>
+          <p>Sparo di energia magica distillata da un milione di magie. <em>Attacco incantesimo +10 al tiro per colpire</em>: <span class="dmg dmg-arcane">10d10 forza</span>. Se il bersaglio usa un oggetto magico, deve superare un <strong>TS su Cos CD 18</strong> o quell'oggetto perde 1 carica permanentemente.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Tempesta di Magia Caotica</div>
+          <div class="action-detail">Abilità — Area 20 ft raggio — TS Intelligenza CD 17 — Ricarica 6</div>
+          <p>Ogni creatura nell'area tira su TS Intelligenza: fallito = subisce <span class="dmg dmg-arcane">6d8 forza</span> e <strong>non può usare incantesimi o oggetti magici</strong> fino alla fine del suo prossimo turno; superato = metà e nessun effetto secondario.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3: FORZA FISICA -->
+    <div class="phase-block phase-forza">
+      <div class="phase-header">
+        <span class="phase-icon">⚡</span>
+        FASE III — POTENZIAMENTO FISICO MAGICO
+      </div>
+      <div class="phase-body">
+        <div class="action">
+          <div class="action-name">Sovraccarico Muscolare</div>
+          <div class="action-detail">Abilità — Azione Bonus</div>
+          <p>ERRORE_∞ canalizza energia magica nei propri tessuti: <strong>+4 al tiro per colpire</strong> e <strong>+2d8 contundente</strong> a tutti gli attacchi fisici fino alla fine del turno. Se un attacco colpisce con dado naturale 18–20, il bersaglio subisce <span class="dmg dmg-bludgeon">Danno Critico automatico</span>.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Slam Sismico</div>
+          <div class="action-detail">Abilità — Mischia — Area 15 ft raggio dal punto d'impatto — TS Forza CD 20</div>
+          <p>Abbatte i pugni sul terreno con una forza che distorce la realtà. <em>TS Forza CD 20</em>: fallito = <span class="dmg dmg-bludgeon">6d10+7 contundente</span> + <em>Prono</em>; superato = metà. Il terreno nell'area diventa <strong>terreno difficile</strong> permanentemente.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 4: VOID -->
+    <div class="phase-block phase-void">
+      <div class="phase-header">
+        <span class="phase-icon">◈</span>
+        FASE IV — MATERIA OSCURA, ANTIMATERIA E VOID
+      </div>
+      <div class="phase-body">
+        <div class="action">
+          <div class="action-name">Dito del Void</div>
+          <div class="action-detail">Abilità — Attacco Magico +10 — Portata 60 ft — Bersaglio singolo — Ricarica 5–6</div>
+          <p>Un raggio di pura non-esistenza. <em>Attacco incantesimo</em>: <span class="dmg dmg-void">8d10 Void</span> (non tipizzato, ignora resistenze e immunità). Se il bersaglio scende a 0 PF, il corpo viene disintegrato: nessuna resurrezione possibile tranne con Desiderio.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Collasso di Antimateria</div>
+          <div class="action-detail">Abilità — Area 20 ft raggio — TS Costituzione CD 19 — Ricarica 6</div>
+          <p>Una bolla di antimateria esplode in esistenza e poi collassa. <em>TS Cos CD 19</em>: fallito = <span class="dmg dmg-void">6d12 Void</span> + il bersaglio viene <em>Maledetto</em> (svantaggio su TS per 1 minuto); superato = metà, nessuna maledizione. Le creature con danni magici temporanei perdono tutti i bonus magici per 1 turno (TS Sag CD 17 per negare).</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Aura di Materia Oscura <span>(Passivo di fase)</span></div>
+          <div class="action-detail">Passivo attivo solo in Fase IV</div>
+          <p>La luce entro 40 ft viene soppressa (equivalente a oscurità magica). Le creature con Vista nel Buio vedono solo in Grigio (perdono la capacità di distinguere dettagli). Gli incantesimi che producono luce falliscono automaticamente nell'area.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 5: CREAZIONE -->
+    <div class="phase-block phase-creazione">
+      <div class="phase-header">
+        <span class="phase-icon">☀</span>
+        FASE V — MAGIA DELLA CREAZIONE
+      </div>
+      <div class="phase-body">
+        <p style="font-size:13px; color:#aaa08a; font-style:italic; margin-bottom:16px;">La magia più potente del multiverso, incompresa persino dalla creatura stessa. ERRORE_∞ la usa in modo caotico e autodistruttivo — subisce <span class="dmg dmg-radiant">2d10 radioso</span> ogni volta che usa un'abilità di questa fase (ignora le proprie immunità).</p>
+        <div class="action">
+          <div class="action-name">Parola di Creazione</div>
+          <div class="action-detail">Abilità — Area 30 ft raggio — TS Carisma CD 21 — Ricarica 6</div>
+          <p>ERRORE_∞ emette un suono che non dovrebbe essere udito dai mortali. <em>TS Car CD 21</em>: fallito = <span class="dmg dmg-radiant">8d12 radioso</span> + il bersaglio viene <em>Accecato</em> e <em>Assordato</em> per 1 minuto (TS al termine di ogni turno per rimuovere); superato = metà, nessun effetto. I costrutti e i non morti falliscono automaticamente questo TS.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Ri-scrittura della Forma</div>
+          <div class="action-detail">Abilità — Bersaglio singolo entro 60 ft — TS Costituzione CD 20 — Ricarica 5–6</div>
+          <p>La creatura tenta di riscrivere la struttura fisica del bersaglio. <em>TS Cos CD 20</em>: fallito = il bersaglio subisce <span class="dmg dmg-radiant">6d10 radioso</span> + il punteggio di COS è ridotto permanentemente di 1d4 (fino a un minimo di 1). Superato = metà, nessuna riduzione. Una riduzione a 0 causa morte immediata.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Luce Primordiale <span>(Passivo di fase)</span></div>
+          <div class="action-detail">Passivo attivo solo in Fase V</div>
+          <p>Un'aura di luce aurea emana da ERRORE_∞: raggio di luce intensa 30 ft, luce fioca ulteriori 30 ft. Le creature non morte entro la luce intensa subiscono <span class="dmg dmg-radiant">3d6 radioso</span> all'inizio del turno. Gli incantesimi di illusione e di oscurità vengono dissolti automaticamente nell'area.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AZIONI LEGGENDARIE -->
+  <div class="legendary-block">
+    <div class="section-title">★ Azioni Leggendarie <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;">3/turno — usabili alla fine del turno di un'altra creatura</span></div>
+
+    <div class="trait">
+      <div class="trait-name">Attacco (1 azione)</div>
+      <p>Effettua un attacco <em>Fendente del Glitch</em>.</p>
+    </div>
+    <div class="trait">
+      <div class="trait-name">Impulso di Dolore (1 azione)</div>
+      <p>Una creatura entro 60 ft deve superare un <strong>TS su Sag CD 17</strong> o subire <span class="dmg dmg-psychic">3d6 psichico</span> e avere Svantaggio al suo prossimo attacco.</p>
+    </div>
+    <div class="trait">
+      <div class="trait-name">Glitch Motorio (2 azioni)</div>
+      <p>ERRORE_∞ si teletrasporta fino a 30 ft in uno spazio libero visibile senza provocare attacchi di opportunità. Lascia un'eco di Glitch al vecchio spazio: chiunque si muova attraverso quel punto subisce <span class="dmg dmg-arcane">2d8 forza</span>. L'eco persiste per 1 minuto.</p>
+    </div>
+    <div class="trait">
+      <div class="trait-name">Eco della Fase (3 azioni — Ricarica 5–6)</div>
+      <p>Ripete istantaneamente l'Abilità di Fase usata nell'ultimo turno (anche se in ricarica), rivolgendola verso un bersaglio o area diversi.</p>
+    </div>
+  </div>
+
+  <!-- REAZIONI -->
+  <div class="stat-block">
+    <div class="section-title">↩ Reazioni <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);">1/turno</span></div>
+    <div class="trait">
+      <div class="trait-name">Contraccolpo Istintivo</div>
+      <p>Quando subisce danni da un attacco in mischia, ERRORE_∞ può effettuare immediatamente un attacco <em>Fendente del Glitch</em> contro l'attaccante come reazione (se entro portata).</p>
+    </div>
+    <div class="trait">
+      <div class="trait-name">Glitch Difensivo</div>
+      <p>Quando viene colpita da un incantesimo bersaglio, può effettuare un <strong>TS su Cos CD uguale al CD del lancio</strong>. Se lo supera, assorbe metà dei danni come PF temporanei (massimo 30).</p>
+    </div>
+  </div>
+
+  <!-- NOTE DM -->
+  <div class="dm-note">
+    <div class="section-title">✎ Note per il DM</div>
+    <p><strong>Gestione del ciclo di fasi:</strong> Usa il tracker visivo qui sopra. Il ciclo cambia all'inizio di ogni turno di ERRORE_∞, <em>prima</em> delle azioni. Il cambiamento è visivamente drammatico — descrivi l'aura che cambia colore, la distorsione attorno alla creatura, le urla che cambiano tono.</p>
+    <p><strong>Bilanciamento con l'NPC alleato:</strong> L'NPC dovrebbe essere in grado di fare 30–40 danni per turno affidabilmente. Con il party a 6°–7°, aspettati:</p>
+    <ul>
+      <li>Il boss tiene sotto pressione il party con l'Aura di Sofferenza (danno garantito passivo).</li>
+      <li>La Fase Void è la più pericolosa: priorità del party = resistere e non scendere a 0 PF.</li>
+      <li>La Fase Creazione offre un momento di pausa (ERRORE_∞ si danneggia da sola) — finestra offensiva per il party.</li>
+      <li>La meccanica delle Due Anime è il "secondo scontro": gestiscila come un momento narrativo importante.</li>
+    </ul>
+    <p><strong>Descrizione dell'aspetto:</strong> Forma vagamente umanoide fatta di frammenti glitchati — parti di corpo che non corrispondono, pixel di realtà che si sovrappongono, archi elettrici di magia pura. Nel centro del petto, se si guarda abbastanza a lungo, si vede per un istante il volto di una ragazza che urla senza suono.</p>
+    <p><strong>Nessun controllo:</strong> ERRORE_∞ non usa tattiche. Attacca sempre il bersaglio più vicino o quello che ha colpito per ultimo. Non fugge, non usa la copertura, non risparmia abilità per dopo — <em>è pura reazione di dolore.</em></p>
+  </div>
+
+  <div style="text-align:center; margin-top:40px; font-family:'Share Tech Mono',monospace; font-size:11px; color:rgba(255,255,255,0.15); letter-spacing:3px;">
+    ERRORE_∞ — SCHEDA GENERATA — SISTEMA D&D 5E COMPATIBILE
+  </div>
+
+</div>
+</body>
+</html>
