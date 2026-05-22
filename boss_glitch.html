@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ERRORE_∞ — Scheda Boss</title>
+<title>Dalorian (ERRORE_∞) — Scheda Boss</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap');
 
@@ -25,6 +25,8 @@
     --arcane: #c400ff;
     --dark: #4a0080;
     --divine: #fff5aa;
+    --temporal: #a0d4ff;
+    --temporal-dim: #4080a0;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -467,6 +469,17 @@
     margin-left: auto;
   }
 
+  .phase-temporale .phase-header { background: linear-gradient(135deg, rgba(80,180,255,0.2), rgba(200,240,255,0.08), rgba(160,120,255,0.15)); color: #a0d4ff; }
+  .phase-temporale { border-color: rgba(80,180,255,0.5); }
+  .phase-temporale .action-name { color: #c0e8ff; }
+  .phase-temporale .phase-header::after {
+    content: ' ⧗ TEMPO INFRANTO ⧗';
+    font-size: 10px;
+    opacity: 0.5;
+    letter-spacing: 3px;
+    margin-left: auto;
+  }
+
   /* ====== LEGENDARY ACTIONS ====== */
   .legendary-block {
     background: rgba(80, 40, 0, 0.15);
@@ -569,6 +582,13 @@
   .phase-dot.forza { border-color: #ff003c; background: rgba(255,0,60,0.1); }
   .phase-dot.void-m { border-color: #8040c0; background: rgba(80,0,160,0.15); }
   .phase-dot.creazione { border-color: #fff5aa; background: rgba(255,245,100,0.1); animation: divineGlow 2s ease-in-out infinite; }
+  .phase-dot.temporale { border-color: #a0d4ff; background: rgba(80,180,255,0.1); animation: temporalGlow 3s ease-in-out infinite; }
+
+  @keyframes temporalGlow {
+    0%,100% { box-shadow: 0 0 6px rgba(160,212,255,0.3); }
+    33% { box-shadow: 0 0 18px rgba(160,212,255,0.7), 0 0 35px rgba(80,120,255,0.25); }
+    66% { box-shadow: 0 0 10px rgba(200,240,255,0.4); }
+  }
 
   @keyframes divineGlow {
     0%,100% { box-shadow: 0 0 8px rgba(255,245,100,0.3); }
@@ -611,6 +631,7 @@
   .dmg-bludgeon { background: rgba(255,60,60,0.2); color: #ff8080; border: 1px solid rgba(255,60,60,0.4); }
   .dmg-psychic { background: rgba(100,0,200,0.2); color: #c080ff; border: 1px solid rgba(100,0,200,0.4); }
   .dmg-void { background: rgba(20,0,40,0.7); color: #8040c0; border: 1px solid rgba(80,0,160,0.6); }
+  .dmg-temporal { background: rgba(80,180,255,0.15); color: #a0d4ff; border: 1px solid rgba(80,180,255,0.4); }
 
   /* ====== RESPONSIVE ====== */
   @media (max-width: 600px) {
@@ -639,8 +660,8 @@
   <!-- HEADER -->
   <div class="boss-header">
     <div class="error-tag">⚠ ENTITÀ NON CLASSIFICABILE — MINACCIA LIVELLO OMEGA ⚠</div>
-    <h1 class="boss-name" data-text="ERRORE_∞">ERRORE_∞</h1>
-    <div class="boss-subtitle">«La Cicatrice Vivente del Multiverso»</div>
+    <h1 class="boss-name" data-text="Dalorian">Dalorian</h1>
+    <div class="boss-subtitle">«La Cicatrice Vivente del Multiverso» <span style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--glitch1);letter-spacing:2px;">— alias ERRORE_∞</span></div>
     <div class="boss-type-line">Aberrazione Cosmica di Taglia Grande · Caotica Malvagia (forza)</div>
     <div class="divider"></div>
   </div>
@@ -652,8 +673,10 @@
       dove magie incompatibili si sono scontrate per eoni fino a formare una coscienza 
       fatta di puro dolore. In fondo a quell'abisso urlante, intrappolati per sempre, 
       battono due cuori: quello di una ragazza e quello di un demone — né padroni né 
-      ospiti, ma prigionieri. ERRORE_∞ non ha volontà propria. Ha solo fame di esistere, 
-      e sofferenza da riversare su tutto ciò che incontra.
+      ospiti, ma prigionieri. Dalorian non ha volontà propria. Ha solo fame di esistere, 
+      e sofferenza da riversare su tutto ciò che incontra. Coloro che sopravvivono 
+      all'incontro la chiamano ERRORE_∞ — un nome che il multiverso stesso sembra 
+      rifiutarsi di pronunciare correttamente.
     </p>
   </div>
 
@@ -752,6 +775,10 @@
         <div class="phase-dot creazione">☀</div>
         <span class="phase-dot-label">Creazione</span>
       </div>
+      <div class="phase-dot-wrap">
+        <div class="phase-dot temporale">⧗</div>
+        <span class="phase-dot-label">Tempo</span>
+      </div>
     </div>
   </div>
 
@@ -761,7 +788,7 @@
 
     <div class="trait">
       <div class="trait-name">Corpo di Errore <span>(Passivo)</span></div>
-      <p>All'inizio di ogni suo turno, ERRORE_∞ cambia automaticamente la sua Fase Attiva passando a quella successiva nell'ordine (Elementale → Arcana → Forza → Void → Creazione → Elementale…). La creatura <strong>non ha alcun controllo</strong> su questo ciclo. Quando cambia fase, ogni creatura entro 10 ft deve superare un <strong>TS su Cos CD 18</strong> o subire <span class="dmg dmg-arcane">3d6 forza</span> dal cataclisma di energia.</p>
+      <p>All'inizio di ogni suo turno, Dalorian cambia automaticamente la sua Fase Attiva passando a quella successiva nell'ordine (Elementale → Arcana → Forza → Void → Creazione → <strong style="color:var(--temporal)">Temporale</strong> → Elementale…). La creatura <strong>non ha alcun controllo</strong> su questo ciclo. Quando cambia fase, ogni creatura entro 10 ft deve superare un <strong>TS su Cos CD 18</strong> o subire <span class="dmg dmg-arcane">3d6 forza</span> dal cataclisma di energia.</p>
     </div>
 
     <div class="trait">
@@ -776,17 +803,17 @@
 
     <div class="trait">
       <div class="trait-name">Le Due Anime <span>(Passivo)</span></div>
-      <p>Quando ERRORE_∞ scende a 0 PF per la prima volta, non muore. La ragazza e il demone si scontrano internamente: la creatura recupera <strong>100 PF</strong>, diventa <em>Stordita</em> fino alla fine del suo prossimo turno, e il ciclo delle fasi si azzera ricominciando dalla fase Elementale. Può usare questa abilità <strong>una volta sola</strong>.</p>
+      <p>Quando Dalorian scende a 0 PF per la prima volta, non muore. La ragazza e il demone si scontrano internamente: la creatura recupera <strong>100 PF</strong>, diventa <em>Stordita</em> fino alla fine del suo prossimo turno, e il ciclo delle fasi si azzera ricominciando dalla fase Elementale. Può usare questa abilità <strong>una volta sola</strong>.</p>
     </div>
 
     <div class="trait">
       <div class="trait-name">Magia Indomabile <span>(Passivo)</span></div>
-      <p>Le incantesimi di controllo (Domina Persona, Incanta Persone, ecc.) falliscono automaticamente contro ERRORE_∞. Essa non ha mente che si possa dominare — solo dolore.</p>
+      <p>Le incantesimi di controllo (Domina Persona, Incanta Persone, ecc.) falliscono automaticamente contro Dalorian. Essa non ha mente che si possa dominare — solo dolore.</p>
     </div>
 
     <div class="trait">
       <div class="trait-name">Frammento di Antimateria <span>(Passivo)</span></div>
-      <p>Ogni volta che ERRORE_∞ subisce guarigione da un effetto magico, subisce invece danno pari alla metà della guarigione come <span class="dmg dmg-void">danno Void</span> (non tipizzato, ignora immunità).</p>
+      <p>Ogni volta che Dalorian subisce guarigione da un effetto magico, subisce invece danno pari alla metà della guarigione come <span class="dmg dmg-void">danno Void</span> (non tipizzato, ignora immunità).</p>
     </div>
   </div>
 
@@ -815,7 +842,7 @@
   <!-- FASI -->
   <div class="stat-block">
     <div class="section-title">☿ Abilità di Fase — Azione (usabile una volta per turno)</div>
-    <p style="font-size:14px; color:var(--text-dim); margin-bottom:20px; font-style:italic;">Ogni turno ERRORE_∞ può usare <strong>una</strong> delle seguenti abilità, determinata dalla sua Fase Attiva corrente.</p>
+    <p style="font-size:14px; color:var(--text-dim); margin-bottom:20px; font-style:italic;">Ogni turno Dalorian può usare <strong>una</strong> delle seguenti abilità, determinata dalla sua Fase Attiva corrente.</p>
 
     <!-- FASE 1: ELEMENTI -->
     <div class="phase-block phase-elementi">
@@ -832,7 +859,7 @@
         <div class="action">
           <div class="action-name">Infusione Elementale</div>
           <div class="action-detail">Abilità — Passivo di fase</div>
-          <p>Durante questa fase, tutti i danni da contatto di ERRORE_∞ ottengono un d6 bonus scelto casualmente tra <span class="dmg dmg-fire">fuoco</span>, <span class="dmg dmg-cold">freddo</span>, <span class="dmg dmg-lightning">fulmine</span> o <span class="dmg dmg-arcane">acido</span>.</p>
+          <p>Durante questa fase, tutti i danni da contatto di Dalorian ottengono un d6 bonus scelto casualmente tra <span class="dmg dmg-fire">fuoco</span>, <span class="dmg dmg-cold">freddo</span>, <span class="dmg dmg-lightning">fulmine</span> o <span class="dmg dmg-arcane">acido</span>.</p>
         </div>
       </div>
     </div>
@@ -867,7 +894,7 @@
         <div class="action">
           <div class="action-name">Sovraccarico Muscolare</div>
           <div class="action-detail">Abilità — Azione Bonus</div>
-          <p>ERRORE_∞ canalizza energia magica nei propri tessuti: <strong>+4 al tiro per colpire</strong> e <strong>+2d8 contundente</strong> a tutti gli attacchi fisici fino alla fine del turno. Se un attacco colpisce con dado naturale 18–20, il bersaglio subisce <span class="dmg dmg-bludgeon">Danno Critico automatico</span>.</p>
+          <p>Dalorian canalizza energia magica nei propri tessuti: <strong>+4 al tiro per colpire</strong> e <strong>+2d8 contundente</strong> a tutti gli attacchi fisici fino alla fine del turno. Se un attacco colpisce con dado naturale 18–20, il bersaglio subisce <span class="dmg dmg-bludgeon">Danno Critico automatico</span>.</p>
         </div>
         <div class="action">
           <div class="action-name">Slam Sismico</div>
@@ -909,11 +936,11 @@
         FASE V — MAGIA DELLA CREAZIONE
       </div>
       <div class="phase-body">
-        <p style="font-size:13px; color:#aaa08a; font-style:italic; margin-bottom:16px;">La magia più potente del multiverso, incompresa persino dalla creatura stessa. ERRORE_∞ la usa in modo caotico e autodistruttivo — subisce <span class="dmg dmg-radiant">2d10 radioso</span> ogni volta che usa un'abilità di questa fase (ignora le proprie immunità).</p>
+        <p style="font-size:13px; color:#aaa08a; font-style:italic; margin-bottom:16px;">La magia più potente del multiverso, incompresa persino dalla creatura stessa. Dalorian la usa in modo caotico e autodistruttivo — subisce <span class="dmg dmg-radiant">2d10 radioso</span> ogni volta che usa un'abilità di questa fase (ignora le proprie immunità).</p>
         <div class="action">
           <div class="action-name">Parola di Creazione</div>
           <div class="action-detail">Abilità — Area 30 ft raggio — TS Carisma CD 21 — Ricarica 6</div>
-          <p>ERRORE_∞ emette un suono che non dovrebbe essere udito dai mortali. <em>TS Car CD 21</em>: fallito = <span class="dmg dmg-radiant">8d12 radioso</span> + il bersaglio viene <em>Accecato</em> e <em>Assordato</em> per 1 minuto (TS al termine di ogni turno per rimuovere); superato = metà, nessun effetto. I costrutti e i non morti falliscono automaticamente questo TS.</p>
+          <p>Dalorian emette un suono che non dovrebbe essere udito dai mortali. <em>TS Car CD 21</em>: fallito = <span class="dmg dmg-radiant">8d12 radioso</span> + il bersaglio viene <em>Accecato</em> e <em>Assordato</em> per 1 minuto (TS al termine di ogni turno per rimuovere); superato = metà, nessun effetto. I costrutti e i non morti falliscono automaticamente questo TS.</p>
         </div>
         <div class="action">
           <div class="action-name">Ri-scrittura della Forma</div>
@@ -923,13 +950,37 @@
         <div class="action">
           <div class="action-name">Luce Primordiale <span>(Passivo di fase)</span></div>
           <div class="action-detail">Passivo attivo solo in Fase V</div>
-          <p>Un'aura di luce aurea emana da ERRORE_∞: raggio di luce intensa 30 ft, luce fioca ulteriori 30 ft. Le creature non morte entro la luce intensa subiscono <span class="dmg dmg-radiant">3d6 radioso</span> all'inizio del turno. Gli incantesimi di illusione e di oscurità vengono dissolti automaticamente nell'area.</p>
+          <p>Un'aura di luce aurea emana da Dalorian: raggio di luce intensa 30 ft, luce fioca ulteriori 30 ft. Le creature non morte entro la luce intensa subiscono <span class="dmg dmg-radiant">3d6 radioso</span> all'inizio del turno. Gli incantesimi di illusione e di oscurità vengono dissolti automaticamente nell'area.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 6: TEMPO -->
+    <div class="phase-block phase-temporale">
+      <div class="phase-header">
+        <span class="phase-icon">⧗</span>
+        FASE VI — CONTROLLO TEMPORALE
+      </div>
+      <div class="phase-body">
+        <p style="font-size:13px; color:#8ab8d8; font-style:italic; margin-bottom:16px;">Non comprende ciò che fa. Il tempo si spezza attorno a Dalorian come vetro, lasciando schegge di passato e futuro incorporate nel presente. Chi cade vittima di questa fase giura di sentire i propri ricordi dissolversi prima ancora che accada qualcosa.</p>
+        <div class="action">
+          <div class="action-name">Inversione Temporale</div>
+          <div class="action-detail">Abilità — Bersaglio singolo entro 60 ft — TS Saggezza CD 19 — Ricarica 5–6</div>
+          <p>Dalorian riscrive i secondi del bersaglio. <em>TS Sag CD 19</em>: fallito = il bersaglio viene <strong>ricondotto alla posizione che occupava all'inizio del suo ultimo turno</strong>; tutti gli slot incantesimo, oggetti carichi e azioni bonus usati in quel turno vengono annullati come non consumati, e subisce <span class="dmg dmg-temporal">5d10 temporale</span> (ignora resistenze); superato = nessun riposizionamento, ma subisce comunque <span class="dmg dmg-temporal">2d10 temporale</span>.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Congelamento Cronologico</div>
+          <div class="action-detail">Abilità — Bersaglio singolo entro 60 ft — TS Costituzione CD 20 — Ricarica 6</div>
+          <p>Il tempo attorno al bersaglio si cristallizza in un frammento eterno. <em>TS Cos CD 20</em>: fallito = <em>Paralizzato</em> per 1 minuto (TS al termine di ogni turno). Mentre paralizzato, il bersaglio non può morire per effetti a tempo (veleni, sanguinamento), ma è <strong>Vulnerabile</strong> a tutti i danni. Superato = il bersaglio agisce per ultimo nell'ordine di iniziativa per 1 minuto e la Velocità è dimezzata.</p>
+        </div>
+        <div class="action">
+          <div class="action-name">Eco del Dolore <span>(Passivo di fase)</span></div>
+          <div class="action-detail">Passivo attivo solo in Fase VI</div>
+          <p>Ogni volta che Dalorian subisce danni in questa fase, un'eco temporale del colpo rimbalza nel presente: chi ha inferto i danni deve superare un <strong>TS su Cos CD 17</strong> o subire <span class="dmg dmg-temporal">1d8 temporale</span> per ogni 10 danni inflitti (max 5d8). I danni si materializzano come bruciature del tempo — la vittima invecchia visibilmente di alcuni istanti.</p>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- AZIONI LEGGENDARIE -->
   <div class="legendary-block">
     <div class="section-title">★ Azioni Leggendarie <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;">3/turno — usabili alla fine del turno di un'altra creatura</span></div>
 
@@ -943,11 +994,15 @@
     </div>
     <div class="trait">
       <div class="trait-name">Glitch Motorio (2 azioni)</div>
-      <p>ERRORE_∞ si teletrasporta fino a 30 ft in uno spazio libero visibile senza provocare attacchi di opportunità. Lascia un'eco di Glitch al vecchio spazio: chiunque si muova attraverso quel punto subisce <span class="dmg dmg-arcane">2d8 forza</span>. L'eco persiste per 1 minuto.</p>
+      <p>Dalorian si teletrasporta fino a 30 ft in uno spazio libero visibile senza provocare attacchi di opportunità. Lascia un'eco di Glitch al vecchio spazio: chiunque si muova attraverso quel punto subisce <span class="dmg dmg-arcane">2d8 forza</span>. L'eco persiste per 1 minuto.</p>
     </div>
     <div class="trait">
       <div class="trait-name">Eco della Fase (3 azioni — Ricarica 5–6)</div>
       <p>Ripete istantaneamente l'Abilità di Fase usata nell'ultimo turno (anche se in ricarica), rivolgendola verso un bersaglio o area diversi.</p>
+    </div>
+    <div class="trait">
+      <div class="trait-name" style="color:var(--temporal);">Frattura dell'Iniziativa (3 azioni — solo in Fase VI)</div>
+      <p>Dalorian distorce l'ordine causale del combattimento. <strong>Rimescola l'ordine di iniziativa</strong>: ogni creatura (incluso Dalorian) tira nuovamente Iniziativa. Gli effetti che durano "fino all'inizio/fine del mio prossimo turno" scadono immediatamente. <em>TS Sag CD 18</em>: fallito = la creatura non può effettuare azioni nel suo prossimo turno (solo movimento); superato = agisce normalmente nel nuovo ordine.</p>
     </div>
   </div>
 
@@ -956,7 +1011,7 @@
     <div class="section-title">↩ Reazioni <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);">1/turno</span></div>
     <div class="trait">
       <div class="trait-name">Contraccolpo Istintivo</div>
-      <p>Quando subisce danni da un attacco in mischia, ERRORE_∞ può effettuare immediatamente un attacco <em>Fendente del Glitch</em> contro l'attaccante come reazione (se entro portata).</p>
+      <p>Quando subisce danni da un attacco in mischia, Dalorian può effettuare immediatamente un attacco <em>Fendente del Glitch</em> contro l'attaccante come reazione (se entro portata).</p>
     </div>
     <div class="trait">
       <div class="trait-name">Glitch Difensivo</div>
@@ -967,20 +1022,21 @@
   <!-- NOTE DM -->
   <div class="dm-note">
     <div class="section-title">✎ Note per il DM</div>
-    <p><strong>Gestione del ciclo di fasi:</strong> Usa il tracker visivo qui sopra. Il ciclo cambia all'inizio di ogni turno di ERRORE_∞, <em>prima</em> delle azioni. Il cambiamento è visivamente drammatico — descrivi l'aura che cambia colore, la distorsione attorno alla creatura, le urla che cambiano tono.</p>
+    <p><strong>Gestione del ciclo di fasi:</strong> Usa il tracker visivo qui sopra. Il ciclo cambia all'inizio di ogni turno di Dalorian, <em>prima</em> delle azioni. Il cambiamento è visivamente drammatico — descrivi l'aura che cambia colore, la distorsione attorno alla creatura, le urla che cambiano tono.</p>
     <p><strong>Bilanciamento con l'NPC alleato:</strong> L'NPC dovrebbe essere in grado di fare 30–40 danni per turno affidabilmente. Con il party a 6°–7°, aspettati:</p>
     <ul>
       <li>Il boss tiene sotto pressione il party con l'Aura di Sofferenza (danno garantito passivo).</li>
       <li>La Fase Void è la più pericolosa: priorità del party = resistere e non scendere a 0 PF.</li>
-      <li>La Fase Creazione offre un momento di pausa (ERRORE_∞ si danneggia da sola) — finestra offensiva per il party.</li>
+      <li>La Fase Creazione offre un momento di pausa (Dalorian si danneggia da sola) — finestra offensiva per il party.</li>
+      <li>La Fase Temporale è imprevedibile: il riposizionamento forzato dei pg può vanificare manovre pianificate. Gestisci l'Inversione Temporale con cura narrativa — è l'abilità più frustrante del boss.</li>
       <li>La meccanica delle Due Anime è il "secondo scontro": gestiscila come un momento narrativo importante.</li>
     </ul>
     <p><strong>Descrizione dell'aspetto:</strong> Forma vagamente umanoide fatta di frammenti glitchati — parti di corpo che non corrispondono, pixel di realtà che si sovrappongono, archi elettrici di magia pura. Nel centro del petto, se si guarda abbastanza a lungo, si vede per un istante il volto di una ragazza che urla senza suono.</p>
-    <p><strong>Nessun controllo:</strong> ERRORE_∞ non usa tattiche. Attacca sempre il bersaglio più vicino o quello che ha colpito per ultimo. Non fugge, non usa la copertura, non risparmia abilità per dopo — <em>è pura reazione di dolore.</em></p>
+    <p><strong>Nessun controllo:</strong> Dalorian non usa tattiche. Attacca sempre il bersaglio più vicino o quello che ha colpito per ultimo. Non fugge, non usa la copertura, non risparmia abilità per dopo — <em>è pura reazione di dolore.</em></p>
   </div>
 
   <div style="text-align:center; margin-top:40px; font-family:'Share Tech Mono',monospace; font-size:11px; color:rgba(255,255,255,0.15); letter-spacing:3px;">
-    ERRORE_∞ — SCHEDA GENERATA — SISTEMA D&D 5E COMPATIBILE
+    Dalorian — SCHEDA GENERATA — SISTEMA D&D 5E COMPATIBILE
   </div>
 
 </div>
